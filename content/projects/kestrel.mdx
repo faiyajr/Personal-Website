@@ -1,0 +1,70 @@
+---
+title: Kestrel
+summary: A custom autonomous quadcopter — own airframe, own flight controller PCB, own firmware, own object detection. Built from scratch on STM32.
+description: >-
+  An autonomous drone built at every layer: a custom flight controller PCB,
+  STM32 firmware, and object detection and flight algorithms of my own, with an
+  open-source flight stack for initial bring-up.
+year: 2026
+role: Solo engineer
+status: in-progress
+featured: true
+order: 4
+size: md
+tech:
+  - C
+  - STM32
+  - Embedded Systems
+  - Altium
+  - ArduPilot
+  - Control Systems
+  - CAD
+repo: https://github.com/faiyajr/Kestrel
+cover:
+  src: /images/projects/kestrel/cover.png
+  alt: Concept render of a custom quadcopter airframe and flight controller board
+  caption: Concept render — hardware is in development.
+highlights:
+  - Custom flight controller PCB designed in Altium
+  - STM32 firmware written from scratch
+  - Open-source flight stack for bring-up, custom algorithms after
+  - Object detection and autonomous flight logic
+draft: false
+---
+
+## The problem
+
+You can buy a drone. You can also buy a flight controller, flash ArduPilot,
+and have something flying in an afternoon. Neither teaches you what happens
+between a gyroscope reading and a motor changing speed.
+
+Kestrel is the version where I own every layer — airframe, board, firmware,
+and the autonomy on top.
+
+## Approach
+
+**Bring-up on a known-good stack.** The first flight uses an open-source
+flight controller (ArduPilot or PX4) on my own hardware. This separates two
+sources of failure: if the board is wrong, I find out while the software is
+known-good. Debugging custom firmware on a custom board with nothing verified
+is how projects like this die.
+
+**Custom PCB, STM32 target.** The flight controller board is designed in
+Altium around an STM32 MCU — sensor interfaces, power design, and the layout
+constraints that come with putting an IMU on a board bolted to four vibrating
+motors.
+
+**Custom algorithms after the platform is trusted.** Object detection and the
+autonomous flight logic come once the airframe holds a stable hover under the
+open-source stack. Sequencing it this way means every new failure has one
+plausible cause.
+
+## Where it stands
+
+In active development — PCB design and firmware bring-up. Airframe CAD is
+done.
+
+The interesting unknown is how much of the control loop I end up writing
+myself versus keeping from the open-source stack. My guess is I keep the
+sensor fusion and replace the mission logic, but that is a guess I intend to
+test rather than assume.

@@ -1,0 +1,287 @@
+@import "tailwindcss";
+
+/* next-themes writes `class="dark"` on <html>, so drive the variant off that
+   rather than the default `prefers-color-scheme` media query. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Palette ──────────────────────────────────────────────────────────────
+   Light is the base definition; dark overrides the same tokens. Every colour
+   used anywhere in the site resolves to one of these — never hard-code a hex
+   in a component. */
+:root {
+  --background: oklch(0.98 0.005 85);
+  --surface: oklch(0.955 0.006 85);
+  --surface-raised: oklch(1 0 0);
+  --foreground: oklch(0.19 0.008 60);
+  --muted: oklch(0.52 0.01 65);
+  --subtle: oklch(0.7 0.008 65);
+  --border: oklch(0.89 0.006 75);
+  --border-strong: oklch(0.8 0.008 75);
+
+  --accent: oklch(0.62 0.17 45);
+  --accent-foreground: oklch(0.99 0 0);
+  --accent-soft: oklch(0.94 0.035 55);
+
+  --radius: 0.875rem;
+  --shadow-card: 0 1px 2px oklch(0.2 0.01 60 / 0.04), 0 8px 24px -12px oklch(0.2 0.01 60 / 0.12);
+  --shadow-lift: 0 2px 4px oklch(0.2 0.01 60 / 0.05), 0 24px 48px -20px oklch(0.2 0.01 60 / 0.22);
+}
+
+.dark {
+  --background: oklch(0.16 0.005 265);
+  --surface: oklch(0.2 0.006 265);
+  --surface-raised: oklch(0.235 0.007 265);
+  --foreground: oklch(0.96 0.004 85);
+  --muted: oklch(0.68 0.008 265);
+  --subtle: oklch(0.5 0.008 265);
+  --border: oklch(0.28 0.008 265);
+  --border-strong: oklch(0.38 0.01 265);
+
+  --accent: oklch(0.74 0.15 55);
+  --accent-foreground: oklch(0.18 0.02 60);
+  --accent-soft: oklch(0.3 0.05 55);
+
+  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.3), 0 8px 24px -12px oklch(0 0 0 / 0.5);
+  --shadow-lift: 0 2px 4px oklch(0 0 0 / 0.35), 0 24px 48px -20px oklch(0 0 0 / 0.65);
+}
+
+/* ── Theme tokens ─────────────────────────────────────────────────────────
+   Exposes the variables above as Tailwind utilities: bg-background,
+   text-muted, border-border, font-display, text-display-lg, etc. */
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-soft: var(--accent-soft);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-instrument), ui-serif, Georgia, serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+
+  --radius-card: var(--radius);
+
+  /* Fluid type. Every step scales with the viewport between 375px and 1440px,
+     so nothing needs a breakpoint override. */
+  --text-display-xl: clamp(3rem, 1.2rem + 7.6vw, 8rem);
+  --text-display-xl--line-height: 0.92;
+  --text-display-xl--letter-spacing: -0.035em;
+
+  --text-display-lg: clamp(2.5rem, 1.4rem + 4.7vw, 5.5rem);
+  --text-display-lg--line-height: 0.98;
+  --text-display-lg--letter-spacing: -0.03em;
+
+  --text-display-md: clamp(1.875rem, 1.2rem + 2.9vw, 3.5rem);
+  --text-display-md--line-height: 1.05;
+  --text-display-md--letter-spacing: -0.025em;
+
+  --text-display-sm: clamp(1.5rem, 1.15rem + 1.5vw, 2.25rem);
+  --text-display-sm--line-height: 1.15;
+  --text-display-sm--letter-spacing: -0.02em;
+
+  --text-lead: clamp(1.0625rem, 0.98rem + 0.38vw, 1.3125rem);
+  --text-lead--line-height: 1.6;
+
+  --shadow-card: var(--shadow-card);
+  --shadow-lift: var(--shadow-lift);
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Offset anchor jumps so headings clear the sticky header. */
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Respect the OS setting: kill transforms and transitions outright. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* Bouncing bars on the Spotify "now playing" indicator. */
+@keyframes equalizer {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@layer components {
+  /* Page gutter + max width. Used by every section so the vertical rhythm
+     and left edge line up across the whole site. */
+  .container-page {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-page {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* A small caps label — used above section headings. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-subtle);
+  }
+
+  /* Subtle film grain over the whole page. Pure CSS, no image request. */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* ── Case study prose ─────────────────────────────────────────────────────
+   Styles the MDX body without pulling in @tailwindcss/typography. */
+.prose-case {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--color-muted);
+}
+.prose-case > * + * {
+  margin-top: 1.25em;
+}
+.prose-case h2 {
+  margin-top: 2.75em;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--color-foreground);
+}
+.prose-case h3 {
+  margin-top: 2em;
+  font-size: 1.1875rem;
+  font-weight: 600;
+  color: var(--color-foreground);
+}
+.prose-case strong {
+  color: var(--color-foreground);
+  font-weight: 600;
+}
+.prose-case a {
+  color: var(--color-foreground);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
+.prose-case a:hover {
+  color: var(--color-accent);
+}
+.prose-case ul,
+.prose-case ol {
+  padding-left: 1.25rem;
+}
+.prose-case ul {
+  list-style: disc;
+}
+.prose-case ol {
+  list-style: decimal;
+}
+.prose-case li::marker {
+  color: var(--color-accent);
+}
+.prose-case li + li {
+  margin-top: 0.4em;
+}
+.prose-case blockquote {
+  border-left: 2px solid var(--color-accent);
+  padding-left: 1.25rem;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--color-foreground);
+}
+.prose-case code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.375rem;
+  padding: 0.1em 0.35em;
+}
+.prose-case pre {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.prose-case pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+.prose-case img {
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+}
+.prose-case hr {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin-block: 3em;
+}

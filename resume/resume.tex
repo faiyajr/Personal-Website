@@ -1,0 +1,184 @@
+%-------------------------
+% Resume in Latex
+%------------------------
+
+\documentclass[letterpaper,11pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\input{glyphtounicode}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.6in}
+\addtolength{\textwidth}{1.2in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-4pt}]
+
+\pdfgentounicode=1
+
+%-------------------------
+% Custom commands
+\newcommand{\resumeItem}[1]{
+  \item\small{{#1 \vspace{-1pt}}}
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-1pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & #2 \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & #2 \\
+    \end{tabular*}\vspace{-5pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[topsep=1pt, itemsep=0pt]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-3pt}}
+
+%-------------------------------------------
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    \textbf{\Huge \scshape Faiyaj Rahman} \\ \vspace{3pt}
+    \small U.S. Citizen $|$ 586-455-7796 $|$ \href{mailto:faiyajr@umich.edu}{\underline{faiyajr@umich.edu}} $|$
+    \href{https://linkedin.com/in/faiyajrahman}{\underline{linkedin.com/in/faiyajrahman}} $|$
+    \href{https://github.com/faiyajr}{\underline{github.com/faiyajr}}
+\end{center}
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of Michigan}{Ann Arbor, MI}
+      {B.S.E. in Computer Engineering}{May 2028}
+      \resumeItemListStart
+        \resumeItem{\textbf{Relevant Coursework:} Data Structures and Algorithms, Computer Organization, Object Oriented Programming, Discrete Math, Computing Systems, Computational Linear Algebra, Vector Calculus}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------HONORS-------------
+\section{Honors \& Awards}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Jane Street FOCUS Participant}{May 2026}
+      {Competitive quantitative trading and software engineering program, selected from  \textbf{1000+} applicants}{New York, NY}
+  \resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Work Experience}
+  \resumeSubHeadingListStart
+  \resumeSubheading
+    {Software Engineering Intern}{May 2026 -- Present}
+    {{\textit{Bosch}} $|$ {Agentic AI, Python, AWS, RESTAPI, CI/CD, Docker, Kubernetes, Bash, Git}}{Farmington Hills, MI}
+     \resumeItemListStart
+      \resumeItem{Architecting a modular platform hosting all organization file-conversion tools, first shipping CAN \texttt{.asc} to \texttt{MF4} with DBC channel mapping for MDA; drops the licensed CANalyzer dependency, saving \textbf{20+} engineer-hours monthly.}
+      \resumeItem{Prototyping org-wide agentic AI by wiring LLM agents to internal CLIs and Git, cutting development time by \textbf{30\%}.}
+      \resumeItem{Deployed a fleet monitoring platform to AWS and scripted multi-tenant vehicle analytics scaling to \textbf{5000+} vehicles.}
+      \resumeItem{Engineered a multi-threaded GUI used by \textbf{100+} developers to build Python executables, saving \textbf{15K} dollars costs.}
+    \resumeItemListEnd
+
+    \resumeSubheading
+      {Co-Founder \& Software Developer}{Nov. 2025 -- Present}
+      {{\textit{Saf}} $|$ {Darul Uloom Michigan} $|$ {Claude, TypeScript, React, Supabase, PostgreSQL, Tailwind, Git}}{Warren, MI}
+      \resumeItemListStart
+        \resumeItem{Co-founded Saf under Darul Uloom Michigan, a platform unifying \textbf{5} products for the Muslim community: Arshad (school management), Tajul Haramain (Pilgramage packages), school admissions, prayer times, and staff time clock.}
+        \resumeItem{Moved password/role verification server-side into a Supabase edge function, enforcing Postgres RLS across \textbf{4} portals.}
+        \resumeItem{Shipped \textbf{300+} PRs and \textbf{43} deploys with typed CI and forward-only SQL migrations for \textbf{30+} educators and admins.}
+        \resumeItem{Integrating AI and an investor demo hub with \textbf{200+} users ahead of a venture raise and scholar-backed public launch.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Software Engineer}{Aug. 2025 -- Present}
+      {{\textit{MRacing FSAE}}  $|$ {Cursor, C/C++, Embedded Systems/Software, Linux, CAN, Raspberry Pi, Gitlab}}{Ann Arbor, MI}
+      \resumeItemListStart
+         \resumeItem{Built a C++ Raspberry Pi dashboard decoding \textbf{1000+} CAN messages/sec into signals and fault states across \textbf{3} pages.}
+        \resumeItem{Refactored the legacy Python GUI codebase into C++, cutting latency $\sim$\textbf{100$\times$} and improving signal timing $\sim$\textbf{50\%}.}
+        \resumeItem{Collaborated with engineers in testing to debug/validate software, ensuring $\sim$\textbf{100\%} data consistency across signals.}
+      \resumeItemListEnd
+
+
+    \resumeSubheading
+      {Undergraduate Research Software Developer}{Sep. 2025 -- May 2026}
+      {{\textit{University of Michigan Electrical Vehicle Center}} $|$ {Claude, Python, Raspberry Pi, Figma, Simulink}}{Ann Arbor, MI}
+      \resumeItemListStart
+        \resumeItem{Developed open-source Python software for an EV charging module, contributing to \textbf{\$10k} in net savings for an OEM.}
+        \resumeItem{Designed a Simulink FSM for system-safety logic and charging protocols, porting it to Python for pipeline integration.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------PROJECTS-----------
+\section{Projects}
+    \resumeSubHeadingListStart
+
+    \resumeProjectHeading
+        {\textbf{Overround} $|$ \emph{C++, Python, PyTorch, React, D3.js, FastAPI, PostgreSQL}}{Jul. 2026 -- Present}
+        \resumeItemListStart
+            \resumeItem{Building a transformer with learned club embeddings over \textbf{18,000+} matches across five domestic leagues, solving cross-league calibration to predict UEFA Champions League outcomes, outperforming Dixon-Coles and Elo baselines.}
+            \resumeItem{Engineering a multithreaded C++ Monte Carlo engine simulating the \textbf{36}-team league phase at \textbf{5,000+} sims per sec.}
+        \resumeItemListEnd
+        
+      \resumeProjectHeading
+          {\textbf{Limit Order Book \& Matching Engine} $|$ \emph{Claude, C++, Linux, Git}}{May 2026 -- Present}
+          \resumeItemListStart
+            \resumeItem{Built a high-performance C++ limit order book with price--time priority, handling \textbf{10K--100K+} orders/sec for market orders, cancellations, modifications, and partial fills, achieving \textbf{sub-millisecond} execution for every core operations.}
+            \resumeItem{Optimized execution using cache-efficient data structures, custom allocators, and tight memory layouts, reducing latency by $\sim$\textbf{40--60\%} and validating throughput against \textbf{1M+} simulated order events under live-market conditions.}
+          \resumeItemListEnd
+
+    
+
+        \resumeProjectHeading
+          {\textbf{Low-Level Modulator} $|$ \emph{Verilog, Assembly,  FPGA, Digital Logic}}{Jan. 2026 -- Apr. 2026}
+          \resumeItemListStart
+            \resumeItem{Engineered a \textbf{18}-instruction processor in Verilog on a DE2-115 FPGA driving a synthesizer with \textbf{40} assembly modules.}
+            \resumeItem{Designed an integer-math DSP pipeline synthesizing \textbf{32-bit} audio from \textbf{3} wavetables with \textbf{5} modulations at \textbf{30 FPS}.}
+          \resumeItemListEnd
+
+    \resumeSubHeadingListEnd
+
+%-----------TECHNICAL SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{: C/C++, Python, JavaScript, TypeScript, Assembly, Java, SQL, Verilog, OCaml, MATLAB} \\
+     \textbf{Tools/Frameworks}{: Claude, Cursor, Codex, React, PostgreSQL, Linux, Git, Node, STM32, Raspberry Pi, Altium, CAD}
+    }}
+ \end{itemize}
+
+\end{document}
+
+

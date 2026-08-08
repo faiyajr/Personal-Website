@@ -1,0 +1,85 @@
+---
+title: Saf
+summary: A platform unifying five products for the Muslim community — school management, pilgrimage packages, admissions, prayer times, and staff time clock — serving 200+ users.
+description: >-
+  Co-founded under Darul Uloom Michigan. Saf gives each participating community
+  its own portal covering Hifdh progress, attendance, assignments, admissions,
+  and secure communication, alongside prayer times, events, donations, and
+  Hajj/Umrah package management.
+year: [2025, 2026]
+role: Co-founder & Software Engineer — backend focus, team of 3
+status: in-progress
+featured: true
+order: 3
+size: lg
+tech:
+  - TypeScript
+  - React
+  - Supabase
+  - PostgreSQL
+  - Tailwind CSS
+  - Edge Functions
+  - Git
+links:
+  - label: Request access
+    href: /contact
+cover:
+  src: /images/projects/saf/cover.png
+  alt: The Saf platform dashboard showing community management modules
+metrics:
+  - label: Products unified
+    value: "5"
+  - label: Users
+    value: 200+
+  - label: PRs shipped
+    value: 300+
+  - label: Deploys
+    value: "43"
+highlights:
+  - Five products under one platform, each community on its own portal
+  - Password and role verification moved server-side into a Supabase edge function
+  - Postgres RLS enforced across 4 portals
+  - Typed CI and forward-only SQL migrations for 30+ educators and admins
+draft: false
+---
+
+## The problem
+
+Religious communities run on software that does not exist for them. A masjid
+with a Hifdh program tracks memorisation progress in spreadsheets, takes
+admissions on paper, announces prayer times on a whiteboard, and manages Hajj
+packages over WhatsApp. Each of those is a real product, and none of them are
+worth building alone for one community.
+
+Saf grew out of the grading app I built for Darul Uloom Michigan. Once one
+community had working school management, the next question was immediate: what
+about admissions, what about prayer times, what about the pilgrimage packages.
+
+## Approach
+
+**Five products, one platform, per-community portals.** Arshad handles school
+management. Tajul Haramain handles pilgrimage packages. Then admissions,
+prayer times, and staff time clock. Each participating community gets its own
+portal, but they share infrastructure — otherwise every new community means a
+new deployment to maintain.
+
+**Authorisation server-side, without exception.** The most consequential thing
+I changed was moving password and role verification out of the client and into
+a Supabase edge function, with Postgres row-level security enforced across all
+four portals. Multi-tenant systems where clients assert their own role are one
+mistake away from a community's student records being readable by another
+community.
+
+**Migrations forward-only, CI typed.** 300+ PRs and 43 deploys across a live
+system used by 30+ educators and admins. Forward-only SQL migrations mean no
+deploy can silently roll a schema backwards under live data, and typed CI
+catches the class of error that only shows up when a real admin clicks the
+thing at 9pm.
+
+## Where it stands
+
+Live with 200+ users. Currently integrating AI features and an investor demo
+hub ahead of a venture raise and a scholar-backed public launch.
+
+The codebase is private. If you want a walkthrough, [send me a
+message](/contact).

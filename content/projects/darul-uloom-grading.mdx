@@ -1,0 +1,57 @@
+---
+title: Darul Uloom Michigan Grading System
+summary: The grading management app built for Darul Uloom Michigan — the beta that Saf grew out of.
+description: >-
+  A grading management system built for Darul Uloom Michigan. Scoped
+  deliberately narrow: grades only, done properly. It worked well enough that
+  it became the foundation for Saf.
+year: 2026
+role: Solo build
+status: live
+featured: false
+order: 20
+size: lg
+tech:
+  - TypeScript
+  - React
+  - Supabase
+  - PostgreSQL
+  - Tailwind CSS
+  - Vercel
+repo: https://github.com/faiyajr/Darul-Uloom-Michigan-Grading-App-Beta
+demo: https://darul-uloom-michigan-grading-app.vercel.app/
+cover:
+  src: /images/projects/darul-uloom-grading/cover.png
+  alt: The grading application showing student records and grade entry
+highlights:
+  - Replaced spreadsheet-based grade tracking for a live school
+  - Deliberately scoped to grading alone
+  - Became the foundation for Saf
+draft: false
+---
+
+## The problem
+
+Darul Uloom Michigan tracked student grades in spreadsheets. That works right
+up until two teachers edit the same file, or a term ends and last year's
+records are in a file nobody can find.
+
+## Approach
+
+**One thing, properly.** The temptation with school software is to build the
+whole school — attendance, admissions, messaging, scheduling. I scoped this to
+grades alone. A grading app teachers actually use beats a school platform they
+abandon in week three.
+
+**Built on managed infrastructure.** Supabase and Postgres behind a React front
+end on Vercel. For a single school with a handful of staff, the correct amount
+of infrastructure to run yourself is none.
+
+## What happened next
+
+It worked, and the questions started immediately: what about attendance, what
+about admissions, what about prayer times. That became [Saf](/projects/saf) —
+five products, multi-tenant, built for more than one community.
+
+This one stays up as the beta it was. The interesting lesson is that scoping it
+narrow is exactly why there was a version two.

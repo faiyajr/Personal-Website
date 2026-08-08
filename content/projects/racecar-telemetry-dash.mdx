@@ -1,0 +1,79 @@
+---
+title: Racecar Telemetry Dash
+summary: A real-time C++ dashboard for MRacing's electric formula car, decoding 1000+ CAN messages/sec on a Raspberry Pi — 100× faster than the Python it replaced.
+description: >-
+  The driver-facing display for MRacing FSAE's electric formula vehicle.
+  Running on a Raspberry Pi with an 800x480 touchscreen, it decodes over a
+  thousand CAN messages per second into live signals and fault states across
+  three pages.
+year: [2025, 2026]
+role: Software Engineer — firmware and screen logic lead
+status: live
+featured: true
+order: 5
+size: md
+tech:
+  - C++
+  - Embedded Systems
+  - CAN Bus
+  - Raspberry Pi
+  - Linux
+  - GitLab
+repo: https://github.com/faiyajr/Racecar-telemetry-dash
+cover:
+  src: /images/projects/racecar-telemetry-dash/cover.png
+  alt: The telemetry dashboard displaying live vehicle signals and fault states
+metrics:
+  - label: CAN messages
+    value: 1000+/s
+  - label: Latency cut
+    value: ~100×
+  - label: Signal timing
+    value: +50%
+  - label: Pages
+    value: "3"
+highlights:
+  - Decodes 1000+ CAN messages/sec into signals and fault states
+  - Refactored the legacy Python GUI into C++, cutting latency ~100×
+  - Improved signal timing ~50%
+  - Validated to ~100% data consistency with the testing team
+draft: false
+---
+
+## The problem
+
+A driver in a formula car looks at the dashboard for a fraction of a second at
+a time. If what they see is 200 milliseconds stale, they are steering on
+information that has already stopped being true — and in a fault condition,
+that is the difference between backing off and not knowing there was anything
+to back off from.
+
+The existing dashboard was a Python GUI. It worked, in the sense that it
+displayed numbers. It could not keep up with the CAN bus.
+
+## Approach
+
+**Rewrite in C++, not optimise the Python.** The bottleneck was not one slow
+function — it was interpreter overhead across a hot path that runs a thousand
+times a second. Profiling and patching would have bought a constant factor.
+Rewriting bought ~100×.
+
+**Decode once, fan out.** CAN frames arrive as raw payloads that must be
+unpacked into meaningful signals. Doing that decode once per frame, into a
+structure the three display pages read from, means adding a page costs nothing
+at the bus layer.
+
+**Fault states as first-class.** Signals and faults render through the same
+pipeline, so a fault cannot be delayed behind a queue of routine telemetry.
+
+**Validation on the real car.** I worked with the testing team to check signal
+consistency against the bus directly, reaching ~100% data consistency across
+all signals. A dashboard that is fast and wrong is worse than the slow one it
+replaced.
+
+## What I'd do differently
+
+I would build the CAN replay harness first. I wrote it partway through, and
+every debugging session before that involved either the actual car or
+hand-crafted frames. Having recorded bus traffic to replay would have made the
+whole first half faster.

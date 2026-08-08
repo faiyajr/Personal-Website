@@ -1,0 +1,28 @@
+node_modules/
+.next/
+out/
+build/
+dist/
+
+.env
+.env.local
+.env*.local
+
+next-env.d.ts
+*.tsbuildinfo
+
+.DS_Store
+Thumbs.db
+.vercel
+
+# Staging area for raw screenshots before they are sorted into public/images
+assets-inbox/*
+!assets-inbox/.gitkeep
+
+# LaTeX build artifacts (keep the .tex source and the compiled PDF)
+resume/*.aux
+resume/*.log
+resume/*.out
+resume/*.synctex.gz
+resume/*.fls
+resume/*.fdb_latexmk

@@ -1,0 +1,78 @@
+---
+title: Limit Order Book & Matching Engine
+summary: A high-performance C++ matching engine with price–time priority, sustaining 10K–100K+ orders/sec at sub-millisecond execution.
+description: >-
+  An exchange matching engine built from scratch in C++. It maintains a limit
+  order book with strict price–time priority and handles market orders,
+  cancellations, modifications, and partial fills — every core operation
+  completing in under a millisecond.
+year: 2026
+role: Solo engineer
+status: in-progress
+featured: true
+order: 1
+size: lg
+tech:
+  - C++
+  - Linux
+  - Data Structures
+  - Systems Programming
+  - Git
+repo: https://github.com/faiyajr/Limit-Order-Book-and-Matching-Engine
+cover:
+  src: /images/projects/limit-order-book/cover.png
+  alt: Concept visualization of an order book with bid and ask price levels
+  caption: Concept image — the engine is a library and CLI, not a GUI.
+metrics:
+  - label: Throughput
+    value: 100K+/s
+  - label: Execution
+    value: <1ms
+  - label: Latency cut
+    value: 40–60%
+  - label: Events validated
+    value: 1M+
+highlights:
+  - Price–time priority across market, limit, cancel, modify, and partial fills
+  - Cache-efficient layouts and custom allocators cut latency 40–60%
+  - Validated against 1M+ simulated order events under live-market conditions
+draft: false
+---
+
+## The problem
+
+A matching engine is a deceptively simple specification: keep resting orders
+sorted by price, break ties by arrival time, and cross incoming orders against
+the best available price. The difficulty is not the logic — it is doing it
+fast enough, consistently enough, that the tail latency stays flat while the
+book is thousands of levels deep and orders arrive in bursts.
+
+I wanted to build the whole thing rather than read about it, because the
+interesting decisions in this problem are all decisions about memory.
+
+## Approach
+
+**Price–time priority, done properly.** Every order carries an arrival
+sequence. Orders at the same price level match strictly in the order they
+arrived, which is what real exchanges guarantee and what makes the engine's
+behaviour reproducible under replay.
+
+**Memory layout as the primary optimisation.** The naive implementation — a
+map of price levels to lists of orders — spends most of its time chasing
+pointers. Restructuring around cache-efficient containers, tight struct
+packing, and custom allocators that keep hot order data contiguous brought
+latency down 40–60% without changing a line of matching logic.
+
+**Validation by replay.** Correctness in a matching engine is not something
+unit tests fully cover; the failure modes come from sequences, not single
+operations. I drive the engine with 1M+ simulated order events reproducing
+live-market conditions and assert book invariants after every one.
+
+## Where it stands
+
+The core engine handles all order types at sub-millisecond execution and
+sustains 10K–100K+ orders/sec depending on book depth and order mix.
+
+Next: a full order-entry protocol layer, and benchmarking against a lock-free
+multi-threaded variant to see whether the contention cost is worth the
+parallelism at realistic message rates.

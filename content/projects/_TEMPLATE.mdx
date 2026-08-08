@@ -1,0 +1,71 @@
+---
+# ── Required ──────────────────────────────────────────────────────────────
+title: Project Name
+summary: One sentence on what it does and who it is for. Shows on the card.
+year: 2025
+
+# ── Layout ────────────────────────────────────────────────────────────────
+# featured: true puts it on the home page. order sorts the featured grid.
+# size controls the bento cell: sm | md | lg | wide | tall
+featured: true
+order: 10
+size: lg
+
+# ── Optional ──────────────────────────────────────────────────────────────
+description: >-
+  A longer intro that replaces the summary at the top of the case study.
+  Two or three sentences is plenty.
+role: Solo build
+status: live # live | in-progress | archived
+
+tech:
+  - TypeScript
+  - Next.js
+  - PostgreSQL
+
+repo: https://github.com/you/repo
+demo: https://your-project.com
+links:
+  - label: Write-up
+    href: https://example.com/post
+
+cover:
+  src: /images/projects/slug/cover.png
+  alt: Describe what is visible in the screenshot, not "screenshot of app"
+
+gallery:
+  - src: /images/projects/slug/detail-1.png
+    alt: The dashboard showing weekly active users
+    caption: Optional caption under the image
+
+metrics:
+  - label: Active users
+    value: 1.2k
+  - label: p95 latency
+    value: 84ms
+
+highlights:
+  - Cut cold-start time from 2.1s to 340ms
+  - Handles 40k requests/day on a single instance
+
+# Set true to keep the file but hide it from the site.
+draft: false
+---
+
+Everything below the frontmatter is the case study body. Plain Markdown, plus
+JSX if you want it.
+
+## The problem
+
+What was broken or missing, and why it mattered.
+
+## Approach
+
+The design decisions that were actually decisions — where you chose between
+two reasonable options and why you picked one.
+
+![Alt text describing the diagram](/images/projects/slug/detail-1.png)
+
+## What I'd do differently
+
+The most credible section on the page. Be specific.

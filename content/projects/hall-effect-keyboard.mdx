@@ -1,0 +1,71 @@
+---
+title: 75% ISO Hall-Effect Keyboard
+summary: A fully custom Hall-effect mechanical keyboard on STM32 — per-key analog measurement, addressable RGB, rotary encoder, OLED, and a case designed from scratch.
+description: >-
+  A 75% ISO Hall-effect keyboard built around an STM32 microcontroller. Every
+  key is measured as an analog value rather than a switch closure, which means
+  adjustable actuation depth per key. Designed with an emphasis on power
+  integrity, signal integrity, and manufacturability.
+year: [2025, 2026]
+role: PCB engineer — solo build
+status: live
+featured: false
+order: 22
+size: wide
+tech:
+  - STM32
+  - Altium
+  - PCB Design
+  - Embedded C
+  - Analog Electronics
+  - CAD
+repo: https://github.com/faiyajr/75-ISO-Hall-Effect-Keyboard
+cover:
+  src: /images/projects/hall-effect-keyboard/cover.png
+  alt: The custom Hall-effect keyboard PCB layout and case design
+highlights:
+  - Per-key analog measurement for adjustable actuation depth
+  - Addressable RGB, rotary encoder, and OLED support
+  - Power and signal integrity treated as first-order design constraints
+  - Custom-designed case
+draft: false
+---
+
+## The problem
+
+A mechanical switch is a binary sensor: pressed or not. A Hall-effect switch
+reports a magnetic field strength that varies continuously with travel — which
+means the keyboard knows *how far down* each key is, and actuation depth
+becomes a per-key setting rather than a property of the switch you soldered in.
+
+Getting that requires reading an analog value from every key, cleanly, fast
+enough that no one perceives latency.
+
+## Approach
+
+**Analog integrity first.** The signal being measured is a small voltage
+varying with magnet distance, on a board that also carries addressable RGB
+switching current at every key. Getting a clean reading is a layout problem
+before it is a firmware problem — ground pours, return paths, and keeping the
+analog sense lines away from everything noisy.
+
+**Power design as a first-order concern.** Per-key RGB plus an OLED plus an
+STM32 doing continuous ADC sampling adds up. Designing the power tree properly
+at the schematic stage is much cheaper than discovering brownouts on assembled
+hardware.
+
+**Manufacturability as a constraint, not an afterthought.** Component choices,
+footprint decisions, and assembly tolerances were made against what can
+actually be fabricated and hand-assembled — a board that only works in CAD is
+not a board.
+
+**Case designed alongside the PCB.** Mounting points, port cutouts, and the
+plate all came from the same model, so board revisions and case revisions
+stayed in step.
+
+## What I got out of it
+
+A working keyboard, and a much better feel for the parts of embedded work that
+have nothing to do with code. Firmware bugs you can iterate on in seconds;
+a board respin costs weeks. That asymmetry changes how carefully you read a
+datasheet.

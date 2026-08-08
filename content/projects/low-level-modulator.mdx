@@ -1,0 +1,77 @@
+---
+title: Low-Level Modulator
+summary: An 18-instruction processor written in Verilog on a DE2-115 FPGA, driving a synthesizer written in assembly — built to teach modulation to kids.
+description: >-
+  A microprocessor-based synthesizer built on an Altera DE2-115 FPGA. A custom
+  18-instruction processor in Verilog runs 40 assembly modules that synthesize
+  audio and animate a matching waveform — so an eight-year-old can see and hear
+  what amplitude, frequency, and phase actually do.
+year: 2026
+role: Firmware and screen logic lead
+status: live
+featured: false
+order: 21
+size: sm
+tech:
+  - Verilog
+  - Assembly
+  - FPGA
+  - Digital Logic
+  - DSP
+repo: https://github.com/faiyajr/Low-Level-Modulator
+cover:
+  src: /images/projects/low-level-modulator/cover.png
+  alt: The synthesizer interface showing an animated audio waveform
+metrics:
+  - label: Instructions
+    value: "18"
+  - label: Assembly modules
+    value: "40"
+  - label: Audio depth
+    value: 32-bit
+  - label: Frame rate
+    value: 30 FPS
+highlights:
+  - Custom 18-instruction processor in Verilog on a DE2-115 FPGA
+  - Integer-math DSP pipeline — no floating point
+  - 3 wavetables, 5 modulations, 32-bit audio at 30 FPS
+draft: false
+---
+
+## The problem
+
+Modulation is one of those concepts that is obvious once you have seen it and
+impenetrable before. Turning a knob changes a number; the number changes a
+waveform; the waveform changes what you hear. Explained in words it is a
+definition. Shown as a live waveform moving in time with the sound it produces,
+it takes about four seconds.
+
+The constraint that made it interesting: build it on an FPGA, on a processor we
+designed ourselves.
+
+## Approach
+
+**A processor sized to the problem.** 18 instructions — exactly what the
+synthesizer needs and nothing more. Every instruction earns its place in the
+decode logic, and the whole ISA fits in your head while writing assembly
+against it.
+
+**Integer math, because there is no FPU.** The DSP pipeline synthesizes 32-bit
+audio from three wavetables with five modulations using fixed-point integer
+arithmetic throughout. Floating point was not an option, which turned out to be
+a good constraint — it forced explicit reasoning about precision at every stage
+rather than trusting a float to absorb it.
+
+**Audio and video locked together.** The waveform animates at 30 FPS in sync
+with the audio it represents. If the display drifts from the sound, the whole
+teaching purpose collapses — a child would be watching one thing and hearing
+another.
+
+## Where it landed
+
+40 assembly modules running on our own silicon design, driving a synthesizer
+that works as an interactive toy for ages 8+.
+
+Writing the assembly for a processor you designed yourself is a strange
+feedback loop. Twice I added an instruction because the assembly was painful
+without it — a luxury that does not exist on hardware you did not build.

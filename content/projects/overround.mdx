@@ -1,0 +1,79 @@
+---
+title: Overround
+summary: A transformer with learned club embeddings over 18,000+ matches, paired with a multithreaded C++ Monte Carlo engine, predicting UEFA Champions League outcomes.
+description: >-
+  A football prediction system in two halves: a transformer that learns club
+  representations across five domestic leagues, and a C++ Monte Carlo engine
+  that simulates the 36-team Champions League phase at 5,000+ simulations per
+  second.
+year: 2026
+role: Solo engineer
+status: in-progress
+featured: true
+order: 2
+size: md
+tech:
+  - C++
+  - Python
+  - PyTorch
+  - React
+  - D3.js
+  - FastAPI
+  - PostgreSQL
+repo: https://github.com/faiyajr/Overround
+cover:
+  src: /images/projects/overround/cover.png
+  alt: Concept visualization of football match prediction probability distributions
+  caption: Concept image — the front end is still in development.
+metrics:
+  - label: Matches trained on
+    value: 18,000+
+  - label: Leagues
+    value: 5
+  - label: Simulations
+    value: 5,000/s
+  - label: League phase
+    value: 36 teams
+highlights:
+  - Learned club embeddings solve cross-league strength calibration
+  - Outperforms Dixon-Coles and Elo baselines
+  - Multithreaded C++ Monte Carlo engine simulates the full league phase
+draft: false
+---
+
+## The problem
+
+Predicting the Champions League is harder than predicting a domestic league,
+and the reason is a measurement problem rather than a modelling one. Clubs
+arrive from five different leagues having only ever played teams inside their
+own. A 20-goal season in one league is not the same evidence as a 20-goal
+season in another, and there are very few cross-league fixtures to calibrate
+against.
+
+Classical approaches — Dixon-Coles, Elo — handle within-league ranking well
+and cross-league calibration poorly.
+
+## Approach
+
+**Learned club embeddings.** Rather than hand-specifying league strength
+coefficients, the model learns a representation per club from 18,000+ matches
+across five leagues. Cross-league fixtures, sparse as they are, tie the
+embedding spaces together, and the transformer picks up the calibration
+implicitly instead of it being an assumption baked in beforehand.
+
+**Simulation separate from prediction.** The model produces match-level
+outcome distributions. Turning those into "what are this club's odds of
+reaching the quarter-finals" requires simulating the tournament many thousands
+of times — a fundamentally different workload, so it lives in a different
+language. The Monte Carlo engine is multithreaded C++ running the full 36-team
+league phase at 5,000+ simulations per second.
+
+**Baselines that are real.** Dixon-Coles and Elo implementations run against
+the same held-out fixtures. A model that cannot beat Elo is not a model worth
+shipping, and having the comparison in the loop keeps that honest.
+
+## Where it stands
+
+The transformer and simulation engine both run and the model outperforms both
+baselines. The React and D3 front end for exploring probability distributions
+is in progress.
