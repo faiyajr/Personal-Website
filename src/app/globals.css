@@ -215,6 +215,18 @@
   }
 }
 
+/* Decorative glyphs orbiting the struct card. Each one gets its own duration
+   and a negative delay, so they start mid-cycle and never bob in unison. */
+@keyframes glyph-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -0.375rem, 0);
+  }
+}
+
 /* Bouncing bars on the Spotify "now playing" indicator. */
 @keyframes equalizer {
   0%,
