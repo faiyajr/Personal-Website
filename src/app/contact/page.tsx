@@ -7,7 +7,6 @@ import { BlurReveal } from "@/components/motion/blur-reveal";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Contact",
   description: `Get in touch with ${site.name}.`,
 };
 

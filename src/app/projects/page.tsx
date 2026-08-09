@@ -6,7 +6,6 @@ import { Reveal } from "@/components/motion/reveal";
 import { getAllProjects, getAllTech } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Work",
   description:
     "Selected projects — what the problem was, how it was built, and what shipped.",
 };

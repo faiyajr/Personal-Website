@@ -10,7 +10,8 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "spotify:auth": "node scripts/spotify-auth.ts",
-    "photos:optimize": "node scripts/optimize-photos.ts"
+    "photos:optimize": "node scripts/optimize-photos.ts",
+    "icons:build": "node scripts/make-icons.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.7.1",

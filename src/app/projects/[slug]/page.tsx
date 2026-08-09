@@ -15,6 +15,7 @@ import {
   getProject,
   getProjectSlugs,
 } from "@/lib/content";
+import { site } from "@/lib/site";
 import { cn, formatYear, prettyUrl } from "@/lib/utils";
 
 type PageProps = { params: Promise<{ slug: string }> };
@@ -29,7 +30,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!project) return {};
 
   return {
-    title: project.title,
+    // Tab stays "Faiyaj Rahman"; the share card still names the project.
+    title: { absolute: site.name },
     description: project.summary,
     openGraph: {
       title: project.title,

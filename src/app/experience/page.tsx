@@ -12,7 +12,6 @@ import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Experience",
   description:
     "Software engineering roles, research, and education — Bosch, Saf, MRacing FSAE, the U-M Electric Vehicle Center, and U-M ITS.",
 };

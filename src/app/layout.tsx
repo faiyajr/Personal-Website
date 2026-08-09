@@ -32,10 +32,9 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: {
-    default: `${site.name} — ${site.title}`,
-    template: `%s — ${site.name}`,
-  },
+  // Every tab reads exactly "Faiyaj Rahman". No template, so child pages
+  // inherit this rather than appending their own name.
+  title: site.name,
   description: site.intro,
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,

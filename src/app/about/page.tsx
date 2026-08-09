@@ -20,7 +20,6 @@ import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "About",
   description: site.bio[0],
 };
 
