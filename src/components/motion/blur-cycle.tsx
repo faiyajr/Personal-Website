@@ -54,13 +54,11 @@ export function BlurCycle({
   }, [index, phrases, animate, words.length]);
 
   return (
-    // `max-w-full` + `min-w-0` are load-bearing, not decoration. A grid column
-    // sized `auto` takes its growth limit from the max-content of its items --
-    // here the whole phrase unwrapped -- and only gets capped at the container
-    // width if the available space resolves as definite. Pinning the max width
-    // and letting the items shrink past min-content makes the cap explicit
-    // instead of relying on that resolution.
-    <span className={cn("grid min-w-0 max-w-full", className)}>
+    // `grid-cols-1` is load-bearing: it compiles to minmax(0, 1fr), which ties
+    // the column to the container. Left implicit, the column is `auto` and
+    // grows to the max-content of the longest phrase — every phrase on one
+    // line — which this component then pushes up through its ancestors.
+    <span className={cn("grid grid-cols-1 min-w-0 max-w-full", className)}>
       {/* Every phrase, invisible and stacked, so the cell is always as tall as
           the tallest one and the line below never jumps between phrases.
 

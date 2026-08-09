@@ -36,7 +36,14 @@ export function Hero() {
       />
 
       <div className="container-page relative pb-16 pt-14 md:pb-24 md:pt-20">
-        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
+        {/* `grid-cols-1` is not cosmetic. Without it there is no
+            grid-template-columns below lg, so the single implicit column is
+            `auto` — content-sized — and inflates to the max-content of its
+            widest descendant, dragging the whole column past the screen.
+            Tailwind compiles grid-cols-N to repeat(N, minmax(0, 1fr)), and
+            that 0 floor is what keeps the track tied to the container instead
+            of to its contents. It is also why lg:grid-cols-12 never broke. */}
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
           {/* ── Left: name, typing line, intro ── */}
           {/* min-w-0: a grid item refuses to shrink below its min-content size
               by default, which lets a long headline push the column wider than
