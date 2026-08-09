@@ -69,9 +69,10 @@ export function PhotoSlideshow({ photos }: { photos: Photo[] }) {
   return (
     <div
       // Portrait frame, centred. The photos are 3:4, so the frame matches them
-      // exactly and nothing is letterboxed; the cap keeps a tall image from
-      // running the full width of the page.
-      className="group relative mx-auto w-full max-w-md"
+      // exactly and nothing is cropped. The width cap stops a tall image from
+      // running the full page width — at 3:4, every 100px of width costs 133px
+      // of height, so this is really a height control.
+      className="group relative mx-auto w-full max-w-[34rem]"
       onMouseEnter={() => setInteracting(true)}
       onMouseLeave={() => setInteracting(false)}
       onFocusCapture={() => setInteracting(true)}
@@ -133,7 +134,7 @@ export function PhotoSlideshow({ photos }: { photos: Photo[] }) {
               alt={photo.alt}
               fill
               priority={index === 0}
-              sizes="(min-width: 768px) 28rem, 100vw"
+              sizes="(min-width: 768px) 34rem, 100vw"
               className="pointer-events-none select-none object-contain"
             />
           </motion.div>
