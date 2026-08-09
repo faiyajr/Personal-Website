@@ -39,6 +39,47 @@ export type SkillGroup = {
   items: string[];
 };
 
+const MONTHS = [
+  "jan",
+  "feb",
+  "mar",
+  "apr",
+  "may",
+  "jun",
+  "jul",
+  "aug",
+  "sep",
+  "oct",
+  "nov",
+  "dec",
+];
+
+/**
+ * Turn "May 2026" / "2025" / "Present" into a sortable number.
+ * "Present" sorts above every real date so ongoing roles win a tie.
+ */
+function toSortKey(value: string): number {
+  const text = value.trim().toLowerCase();
+  if (text === "present" || text === "current") return Number.MAX_SAFE_INTEGER;
+
+  const year = Number(/\d{4}/.exec(text)?.[0] ?? 0);
+  const month = MONTHS.findIndex((m) => text.startsWith(m));
+  return year * 12 + (month === -1 ? 0 : month);
+}
+
+/**
+ * Experience in true reverse-chronological order: most recent start first,
+ * ties broken by whichever role is still running.
+ *
+ * Sorted here rather than by hand so adding a role to the array below never
+ * requires putting it in the right slot.
+ */
+export function getExperience(): Experience[] {
+  return [...experience].sort(
+    (a, b) => toSortKey(b.start) - toSortKey(a.start) || toSortKey(b.end) - toSortKey(a.end),
+  );
+}
+
 export const experience: Experience[] = [
   {
     company: "Bosch",
@@ -93,13 +134,28 @@ export const experience: Experience[] = [
     ],
     tech: ["Python", "Raspberry Pi", "Simulink", "Figma"],
   },
+  {
+    // NOT in resume.tex — add the real dates and bullets, then mirror them
+    // back into the LaTeX so the PDF and the site agree.
+    company: "University of Michigan ITS",
+    role: "Tech Consultant",
+    start: "Aug 2025",
+    end: "Present",
+    location: "Ann Arbor, MI",
+    points: [
+      "Administered new computers, devices, and ID access credentials for campus customers and students.",
+      "Diagnosed hardware, software, and network issues while escalating complex cases to senior consultants.",
+      "Utilized GSX and TeamDynamix to manage support tickets, track loaner/repaired devices, issues, and resolutions.",
+    ],
+    tech: ["TeamDynamix", "GSX", "Troubleshooting", "Consulting"],
+  },
 ];
 
 export const education: Education[] = [
   {
     school: "University of Michigan",
     degree: "B.S.E. in Computer Engineering",
-    start: "2024",
+    start: "2025",
     end: "May 2028",
     location: "Ann Arbor, MI",
     details: [

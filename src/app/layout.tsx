@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 
+import { SiteBackground } from "@/components/background/site-background";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -60,8 +61,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#faf9f7" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d0d10" },
+    { media: "(prefers-color-scheme: light)", color: "#f2f8f6" },
+    { media: "(prefers-color-scheme: dark)", color: "#232926" },
   ],
 };
 
@@ -80,10 +81,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           >
             Skip to content
           </a>
-          <ScrollProgress />
-          <SiteHeader />
-          <main id="main">{children}</main>
-          <SiteFooter />
+          <SiteBackground />
+
+          {/* Everything sits above the background field. */}
+          <div className="relative z-10">
+            <ScrollProgress />
+            <SiteHeader />
+            <main id="main">{children}</main>
+            <SiteFooter />
+          </div>
         </ThemeProvider>
       </body>
     </html>

@@ -17,14 +17,14 @@ export default function OpenGraphImage() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#0d0d10",
+          background: "#232926",
           padding: 80,
           fontFamily: "sans-serif",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{ width: 12, height: 12, borderRadius: 999, background: "#f0873f" }} />
-          <div style={{ fontSize: 24, color: "#8f8f9a", letterSpacing: 2 }}>
+          <div style={{ fontSize: 24, color: "#a3bab3", letterSpacing: 2 }}>
             {site.title.toUpperCase()}
           </div>
         </div>
@@ -41,7 +41,7 @@ export default function OpenGraphImage() {
           >
             {site.headline}
           </div>
-          <div style={{ fontSize: 30, color: "#8f8f9a" }}>{site.name}</div>
+          <div style={{ fontSize: 30, color: "#a3bab3" }}>{site.name}</div>
         </div>
 
         <div style={{ display: "flex", fontSize: 22, color: "#5f5f6a" }}>

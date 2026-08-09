@@ -4,17 +4,19 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Music } from "lucide-react";
 
+import type { ManualTrack } from "@/lib/about";
 import type { SpotifyPayload, Track } from "@/lib/spotify";
 import { cn } from "@/lib/utils";
 
 /**
- * "What I'm listening to" — live from the Spotify API.
+ * "What I'm listening to".
  *
- * Fetched client-side rather than at build time so the data is current
- * without redeploying. Renders nothing at all when Spotify is not configured,
- * except in development, where it explains how to set it up.
+ * Live from the Spotify API when it is available, fetched client-side so the
+ * data stays current without a redeploy. When the API is unavailable — no
+ * credentials, or the app is blocked from the Web API for lack of Premium —
+ * it falls back to the hand-written `onRepeat` list instead of vanishing.
  */
-export function SpotifyPanel() {
+export function SpotifyPanel({ fallback = [] }: { fallback?: ManualTrack[] }) {
   const [data, setData] = useState<SpotifyPayload | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -35,25 +37,15 @@ export function SpotifyPanel() {
     };
   }, []);
 
-  if (failed) return null;
+  if (!data && !failed) return <SkeletonPanel />;
 
-  if (!data) return <SkeletonPanel />;
-
-  if (!data.configured) {
-    if (process.env.NODE_ENV !== "development") return null;
-    return (
-      <div className="rounded-card border border-dashed border-border-strong p-6 text-sm text-muted">
-        <p className="font-medium text-foreground">Spotify not configured</p>
-        <p className="mt-1">
-          Run <code className="font-mono text-xs">npm run spotify:auth</code> and add the three
-          env vars. This notice only shows in development.
-        </p>
-      </div>
-    );
+  // API unavailable — show the hand-written list if there is one.
+  if (failed || !data?.configured) {
+    return <FallbackPanel tracks={fallback} />;
   }
 
   const { nowPlaying, topTracks } = data;
-  if (!nowPlaying && topTracks.length === 0) return null;
+  if (!nowPlaying && topTracks.length === 0) return <FallbackPanel tracks={fallback} />;
 
   return (
     <div className="overflow-hidden rounded-card border border-border bg-surface/40">
@@ -97,6 +89,42 @@ export function SpotifyPanel() {
           </ol>
         </div>
       )}
+    </div>
+  );
+}
+
+/** Rendered when the live API is unavailable. */
+function FallbackPanel({ tracks }: { tracks: ManualTrack[] }) {
+  if (tracks.length === 0) return null;
+
+  return (
+    <div className="overflow-hidden rounded-card border border-border bg-surface/50 p-5 backdrop-blur-sm">
+      <p className="eyebrow mb-4 flex items-center gap-2">
+        <Music className="size-3" />
+        On repeat
+      </p>
+      <ol className="space-y-3">
+        {tracks.map((track, i) => (
+          <li key={`${track.title}-${track.artist}`} className="flex items-baseline gap-3">
+            <span className="w-4 shrink-0 font-mono text-xs text-subtle">{i + 1}</span>
+            <div className="min-w-0 flex-1">
+              {track.url ? (
+                <a
+                  href={track.url}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="block truncate text-sm text-foreground hover:text-accent"
+                >
+                  {track.title}
+                </a>
+              ) : (
+                <p className="truncate text-sm text-foreground">{track.title}</p>
+              )}
+              <p className="truncate text-xs text-muted">{track.artist}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }

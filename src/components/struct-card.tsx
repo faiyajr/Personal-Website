@@ -9,10 +9,10 @@ import { cn } from "@/lib/utils";
  * would ship a grammar and a theme to every visitor for no gain.
  */
 
-const KEYWORD = "text-[oklch(0.7_0.16_320)] dark:text-[oklch(0.78_0.15_320)]";
-const TYPE = "text-[oklch(0.6_0.13_230)] dark:text-[oklch(0.75_0.12_230)]";
+const KEYWORD = "text-accent";
+const TYPE = "text-accent-2";
 const NAME = "text-foreground";
-const STRING = "text-[oklch(0.58_0.13_150)] dark:text-[oklch(0.76_0.13_150)]";
+const STRING = "text-[#a86f44] dark:text-[#d9b08c]";
 const PUNCT = "text-subtle";
 
 function Value({ value }: { value: StructField["value"] }) {

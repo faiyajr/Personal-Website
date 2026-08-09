@@ -104,16 +104,28 @@ To move to Sanity/Contentful/Payload: write `src/lib/content/<cms>-source.ts` ex
 
 ---
 
+## Pages
+
+| Route | Content | Edited in |
+| --- | --- | --- |
+| `/` | Hero, project showcase, bento grid, compact experience timeline, toolkit | `src/lib/site.ts` + content |
+| `/projects` | Filterable index; `/projects/[slug]` per case study | `content/projects/*.mdx` |
+| `/experience` | Full timeline, education, honors, skills | `src/lib/resume.ts` |
+| `/about` | Bio, photos, interests, Spotify, watches, contact form | `src/lib/about.ts` |
+| `/contact` | Links + form | `src/lib/site.ts` |
+
+---
+
 ## The About page
 
 Four things beyond the resume, each edited in a different place:
 
 | Section | Edit here |
 | --- | --- |
-| Photos | Drop files in `public/images/me/` — no config. Filenames become alt text, so name them `playing-football.jpg`, not `IMG_4821.jpg` |
+| Photos | Drop files in `public/images/me/` — no config. Rendered as an auto-advancing slideshow. Filenames become alt text, so name them `hocking-hills.png`, not `IMG_4821.jpg` |
 | Interests | `interests` in `src/lib/about.ts` |
-| Films / shows | `films` and `filmsIntro` in `src/lib/about.ts`. Posters optional — drop them in `public/images/films/` |
-| Spotify | Env vars only — see below |
+| Watches | `watches` in `src/lib/about.ts`. Posters live in `public/images/watches/`. An entry whose poster file is missing is skipped rather than rendering broken, so you can add the entry before the image |
+| On repeat | `onRepeat` in `src/lib/about.ts` (fallback), or the live Spotify API — see below |
 
 Each section hides itself when empty, so you can fill them in one at a time.
 
@@ -121,15 +133,28 @@ Each section hides itself when empty, so you can fill them in one at a time.
 
 Shows what you're playing now plus your top five tracks this month, live from the Spotify API — no redeploy needed to stay current.
 
+> **The Web API requires a Spotify Premium subscription.** Without one, Spotify blocks the app outright and every request 403s. In that case the panel falls back to the hand-written `onRepeat` list in `src/lib/about.ts`, which needs no account and never breaks.
+
+If you do have Premium:
+
 ```bash
 # 1. Create an app: https://developer.spotify.com/dashboard
-# 2. Add redirect URI:  http://127.0.0.1:8888/callback
-# 3. Put the client ID + secret in .env.local
+# 2. Under "Which API/SDKs are you planning to use?" tick **Web API**
+# 3. Add redirect URI:  http://127.0.0.1:8888/callback
+# 4. Put the client ID + secret in .env.local
 npm run spotify:auth        # opens Spotify, prints your refresh token
-# 4. Paste SPOTIFY_REFRESH_TOKEN into .env.local and Vercel
+# 5. Paste SPOTIFY_REFRESH_TOKEN into .env.local and Vercel
 ```
 
-Refresh tokens don't expire, so that's one-time. Without the env vars the panel doesn't render at all (in development it shows a setup hint instead).
+Refresh tokens don't expire, so that's one-time. The route treats "no credentials", "blocked", and "empty response" identically: report unavailable, let the UI use the fallback. It never renders an empty panel.
+
+---
+
+## Hero headline
+
+The line under your name cycles through `headlinePhrases` in `src/lib/site.ts` with a decode effect — each character resolves out of glyph noise, left to right.
+
+It reserves its final height up front, so nothing below it shifts between phrases, and it announces only the settled phrase to screen readers rather than every scrambled frame.
 
 ---
 
@@ -178,6 +203,28 @@ Every push to `main` redeploys; pull requests get preview URLs.
 ## Design tokens
 
 All colour, type, and spacing tokens are in `src/app/globals.css`. Light is the base palette, `.dark` overrides the same variable names, and `@theme inline` exposes them as Tailwind utilities. **Never hard-code a hex in a component** — add a token.
+
+The palette is built from five colours:
+
+| | Hex | Role |
+| --- | --- | --- |
+| Deep pine | `#2C3531` | Dark surface / light text |
+| Teal | `#116466` | Light-mode accent |
+| Tan | `#D9B08C` | Supporting warm tone (`--accent-2`) |
+| Peach | `#FFCB9A` | Dark-mode accent |
+| Mint | `#D1E8E2` | Dark-mode text / light-mode accent-soft |
+
+The accent flips role between themes deliberately — teal carries emphasis on light ground, peach on dark, because neither reads as an accent against both.
+
+### Animated background
+
+`src/components/background/` renders behind every page:
+
+- **Drifting blobs** — three blurred radial gradients on long, mutually prime durations so the loop never visibly repeats. Transform and opacity only, so they composite on the GPU.
+- **Grid** — faint engineering-drawing rule, radially masked so it fades at the edges.
+- **Particle field** — a canvas where particles drift, link to near neighbours, and are pushed away by the cursor with an inverse-square force plus a damped spring back to rest.
+
+The particle field disables itself entirely under `prefers-reduced-motion`, pauses when the tab is hidden, scales its count with viewport area, and re-reads its colour when you toggle the theme.
 
 Type scales fluidly via `clamp()` (`text-display-xl` down to `text-lead`), so headings resize continuously between 375px and 1440px with no breakpoint overrides.
 

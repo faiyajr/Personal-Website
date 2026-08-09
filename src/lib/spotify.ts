@@ -118,7 +118,21 @@ export async function getSpotifyData(): Promise<SpotifyPayload> {
     const data: { items?: SpotifyTrack[] } = await topRes.json().catch(() => ({}));
     topTracks = (data.items ?? []).map(toTrack);
   } else {
-    console.error("[spotify] top tracks failed:", topRes.status);
+    // 403 here almost always means the app is blocked from the Web API for
+    // lack of a Premium subscription, not a bad token.
+    console.error(
+      "[spotify] top tracks failed:",
+      topRes.status,
+      topRes.status === 403
+        ? "— app is likely blocked from the Web API (Premium required)"
+        : "",
+    );
+  }
+
+  // Nothing usable came back: report it as unconfigured so the UI falls back
+  // to the hand-written list rather than rendering an empty panel.
+  if (!nowPlaying && topTracks.length === 0) {
+    return { configured: false, nowPlaying: null, topTracks: [] };
   }
 
   return { configured: true, nowPlaying, topTracks };

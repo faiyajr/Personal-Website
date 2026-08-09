@@ -5,44 +5,73 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* ── Palette ──────────────────────────────────────────────────────────────
+   Built from five brand colours:
+     #2C3531  deep pine    #116466  teal      #D9B08C  tan
+     #FFCB9A  peach        #D1E8E2  mint
+
    Light is the base definition; dark overrides the same tokens. Every colour
    used anywhere in the site resolves to one of these — never hard-code a hex
-   in a component. */
-:root {
-  --background: oklch(0.98 0.005 85);
-  --surface: oklch(0.955 0.006 85);
-  --surface-raised: oklch(1 0 0);
-  --foreground: oklch(0.19 0.008 60);
-  --muted: oklch(0.52 0.01 65);
-  --subtle: oklch(0.7 0.008 65);
-  --border: oklch(0.89 0.006 75);
-  --border-strong: oklch(0.8 0.008 75);
+   in a component.
 
-  --accent: oklch(0.62 0.17 45);
-  --accent-foreground: oklch(0.99 0 0);
-  --accent-soft: oklch(0.94 0.035 55);
+   The accent flips role between themes on purpose: teal carries the emphasis
+   on light ground, peach on dark, because neither reads as an accent against
+   both. `--accent-2` is the supporting warm tone. */
+:root {
+  --background: #f2f8f6;
+  --surface: #e4f0ec;
+  --surface-raised: #ffffff;
+  --foreground: #2c3531;
+  --muted: #4f615b;
+  --subtle: #7b8d87;
+  --border: #cadfd8;
+  --border-strong: #a8c4bc;
+
+  --accent: #116466;
+  --accent-foreground: #ffffff;
+  --accent-soft: #d1e8e2;
+  --accent-2: #b9835a;
+
+  /* Background field — the animated blobs behind every page. */
+  --glow-1: #116466;
+  --glow-2: #d9b08c;
+  --glow-3: #d1e8e2;
+  --glow-opacity: 0.3;
+  --grid-line: #2c3531;
+  --grid-opacity: 0.045;
+  --particle: #116466;
+  --particle-opacity: 0.42;
 
   --radius: 0.875rem;
-  --shadow-card: 0 1px 2px oklch(0.2 0.01 60 / 0.04), 0 8px 24px -12px oklch(0.2 0.01 60 / 0.12);
-  --shadow-lift: 0 2px 4px oklch(0.2 0.01 60 / 0.05), 0 24px 48px -20px oklch(0.2 0.01 60 / 0.22);
+  --shadow-card: 0 1px 2px rgb(44 53 49 / 0.05), 0 8px 24px -12px rgb(44 53 49 / 0.14);
+  --shadow-lift: 0 2px 4px rgb(44 53 49 / 0.06), 0 24px 48px -20px rgb(44 53 49 / 0.24);
 }
 
 .dark {
-  --background: oklch(0.16 0.005 265);
-  --surface: oklch(0.2 0.006 265);
-  --surface-raised: oklch(0.235 0.007 265);
-  --foreground: oklch(0.96 0.004 85);
-  --muted: oklch(0.68 0.008 265);
-  --subtle: oklch(0.5 0.008 265);
-  --border: oklch(0.28 0.008 265);
-  --border-strong: oklch(0.38 0.01 265);
+  --background: #232926;
+  --surface: #2c3531;
+  --surface-raised: #354039;
+  --foreground: #d1e8e2;
+  --muted: #a3bab3;
+  --subtle: #788b85;
+  --border: #3a453f;
+  --border-strong: #52615a;
 
-  --accent: oklch(0.74 0.15 55);
-  --accent-foreground: oklch(0.18 0.02 60);
-  --accent-soft: oklch(0.3 0.05 55);
+  --accent: #ffcb9a;
+  --accent-foreground: #2c3531;
+  --accent-soft: #40453c;
+  --accent-2: #4fb3b5;
 
-  --shadow-card: 0 1px 2px oklch(0 0 0 / 0.3), 0 8px 24px -12px oklch(0 0 0 / 0.5);
-  --shadow-lift: 0 2px 4px oklch(0 0 0 / 0.35), 0 24px 48px -20px oklch(0 0 0 / 0.65);
+  --glow-1: #116466;
+  --glow-2: #d9b08c;
+  --glow-3: #2c3531;
+  --glow-opacity: 0.38;
+  --grid-line: #d1e8e2;
+  --grid-opacity: 0.035;
+  --particle: #ffcb9a;
+  --particle-opacity: 0.36;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -12px rgb(0 0 0 / 0.55);
+  --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.35), 0 24px 48px -20px rgb(0 0 0 / 0.7);
 }
 
 /* ── Theme tokens ─────────────────────────────────────────────────────────
@@ -60,6 +89,7 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent-soft: var(--accent-soft);
+  --color-accent-2: var(--accent-2);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-instrument), ui-serif, Georgia, serif;
@@ -140,6 +170,46 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+}
+
+/* ── Animated background field ────────────────────────────────────────────
+   Three blurred colour blobs drifting on long, mutually prime durations so
+   the loop never visibly repeats. Transform and opacity only — both composite
+   on the GPU, so this costs nothing on the main thread. */
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(6vw, 4vh, 0) scale(1.12);
+  }
+  66% {
+    transform: translate3d(-4vw, 7vh, 0) scale(0.94);
+  }
+}
+
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.05);
+  }
+  40% {
+    transform: translate3d(-7vw, -5vh, 0) scale(0.9);
+  }
+  75% {
+    transform: translate3d(5vw, 6vh, 0) scale(1.15);
+  }
+}
+
+@keyframes drift-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.95);
+  }
+  50% {
+    transform: translate3d(4vw, -8vh, 0) scale(1.2);
   }
 }
 

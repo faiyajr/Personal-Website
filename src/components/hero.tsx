@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 
 import { Magnetic } from "@/components/motion/magnetic";
-import { TypingText } from "@/components/motion/typing-text";
+import { ScrambleText } from "@/components/motion/scramble-text";
 import { StructCard } from "@/components/struct-card";
 import { buttonVariants } from "@/components/ui/button";
 import { site } from "@/lib/site";
@@ -49,8 +49,8 @@ export function Hero() {
             >
               I&apos;m <span className="text-accent">{site.firstName}</span>,
               <br />
-              <TypingText
-                phrases={site.typingPhrases}
+              <ScrambleText
+                phrases={site.headlinePhrases}
                 className="text-foreground"
                 cursorClassName="bg-accent"
               />

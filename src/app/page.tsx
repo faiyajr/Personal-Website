@@ -4,6 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import { BentoGrid } from "@/components/bento-grid";
 import { BentoItem } from "@/components/bento-item";
 import { EmptyState } from "@/components/empty-state";
+import { ExperienceTimeline } from "@/components/experience-timeline";
 import { Hero } from "@/components/hero";
 import { Reveal } from "@/components/motion/reveal";
 import { ProjectCard } from "@/components/project-card";
@@ -11,6 +12,7 @@ import { ProjectShowcase } from "@/components/project-showcase";
 import { SectionHeading } from "@/components/section-heading";
 import { buttonVariants } from "@/components/ui/button";
 import { getAllProjects, getAllTech, getFeaturedProjects } from "@/lib/content";
+import { getExperience } from "@/lib/resume";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
@@ -49,6 +51,16 @@ export default function HomePage() {
           </BentoGrid>
         </section>
       )}
+
+      <section className="container-page py-16 md:py-24" aria-labelledby="experience-heading">
+        <SectionHeading
+          eyebrow="Experience"
+          title="Where I've worked."
+          description="Internships, research, and a startup — the full detail lives on the experience page."
+          action={{ label: "Full experience", href: "/experience" }}
+        />
+        <ExperienceTimeline experience={getExperience()} compact />
+      </section>
 
       {tech.length > 0 && (
         <section className="container-page py-16 md:py-24" aria-labelledby="stack-heading">

@@ -40,7 +40,8 @@ export function getPhotos(): Photo[] {
     .filter((f) => IMAGE_RE.test(f))
     .sort()
     .map((filename) => ({
-      src: `/images/me/${filename}`,
+      // Encoded because filenames routinely contain spaces.
+      src: `/images/me/${encodeURIComponent(filename)}`,
       alt: altFromFilename(filename),
     }));
 }

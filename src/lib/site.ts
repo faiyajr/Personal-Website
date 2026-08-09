@@ -33,10 +33,10 @@ export const site = {
     "Hey! I'm Faiyaj. I like dabbling in building, programming, playing football, going to the gym, and the occasional late-night gaming session. Hope you enjoy your stay.",
 
   /**
-   * Cycled through by the typing effect under the hero heading.
+   * Cycled through by the decode effect under the hero heading.
    * Each one has to read correctly after "I'm Faiyaj,".
    */
-  typingPhrases: [
+  headlinePhrases: [
     "a Computer Engineering student.",
     "a Software Engineering Intern at Bosch.",
     "the co-founder of Saf.",
@@ -107,7 +107,8 @@ export const site = {
 
   // ── Navigation ──────────────────────────────────────────────────────────
   nav: [
-    { label: "Work", href: "/projects" },
+    { label: "Experience", href: "/experience" },
+    { label: "Projects", href: "/projects" },
     { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ],
