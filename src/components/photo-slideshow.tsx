@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 
+import { useMotionEnabled, useMotionScale } from "@/components/motion/use-motion-scale";
 import type { Photo } from "@/lib/photos";
 import { cn } from "@/lib/utils";
 
@@ -18,7 +19,9 @@ const INTERVAL_MS = 4500;
  * picture. Arrow keys and horizontal swipes both work.
  */
 export function PhotoSlideshow({ photos }: { photos: Photo[] }) {
-  const reduce = useReducedMotion();
+  // Gates auto-advance only — behaviour, never markup.
+  const animate = useMotionEnabled();
+  const scale = useMotionScale();
   const [index, setIndex] = useState(0);
   /** +1 moving forward, -1 back — decides which way slides enter and exit. */
   const [direction, setDirection] = useState(1);
@@ -42,11 +45,11 @@ export function PhotoSlideshow({ photos }: { photos: Photo[] }) {
   // Auto-advance. Reduced motion disables it outright — an animation the
   // visitor did not ask for is exactly what that setting is about.
   useEffect(() => {
-    if (reduce || paused || interacting || count <= 1) return;
+    if (!animate || paused || interacting || count <= 1) return;
 
     const timer = setTimeout(advance, INTERVAL_MS);
     return () => clearTimeout(timer);
-  }, [advance, reduce, paused, interacting, count, index]);
+  }, [advance, animate, paused, interacting, count, index]);
 
   if (count === 0) {
     if (process.env.NODE_ENV !== "development") return null;
@@ -65,7 +68,10 @@ export function PhotoSlideshow({ photos }: { photos: Photo[] }) {
 
   return (
     <div
-      className="group relative"
+      // Portrait frame, centred. The photos are 3:4, so the frame matches them
+      // exactly and nothing is letterboxed; the cap keeps a tall image from
+      // running the full width of the page.
+      className="group relative mx-auto w-full max-w-md"
       onMouseEnter={() => setInteracting(true)}
       onMouseLeave={() => setInteracting(false)}
       onFocusCapture={() => setInteracting(true)}
@@ -85,7 +91,10 @@ export function PhotoSlideshow({ photos }: { photos: Photo[] }) {
             back();
           }
         }}
-        className="relative aspect-[16/10] overflow-hidden rounded-card border border-border bg-surface md:aspect-[21/9]"
+        // 3:4 matches the photos, so they fill the frame edge to edge. A
+        // landscape shot added later still works — `object-contain` below
+        // letterboxes it against the blurred backdrop rather than cropping.
+        className="relative aspect-[3/4] overflow-hidden rounded-card border border-border bg-surface"
       >
         <AnimatePresence initial={false} custom={direction} mode="popLayout">
           <motion.div
@@ -100,33 +109,35 @@ export function PhotoSlideshow({ photos }: { photos: Photo[] }) {
               else if (info.offset.x > 60) back();
               setInteracting(false);
             }}
-            initial={
-              reduce ? { opacity: 0 } : { opacity: 0, x: direction > 0 ? "12%" : "-12%" }
-            }
+            initial={{ opacity: 0, x: direction > 0 ? "12%" : "-12%" }}
             animate={{ opacity: 1, x: 0 }}
-            exit={reduce ? { opacity: 0 } : { opacity: 0, x: direction > 0 ? "-8%" : "8%" }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, x: direction > 0 ? "-8%" : "8%" }}
+            transition={{ duration: 0.6 * scale, ease: [0.16, 1, 0.3, 1] }}
             className="absolute inset-0 cursor-grab active:cursor-grabbing"
           >
+            {/* A blown-up, blurred copy fills the letterboxing left by
+                `object-contain`, so portrait shots sit in a colour field drawn
+                from the photo itself instead of a flat grey slab. */}
+            <Image
+              src={photo.src}
+              alt=""
+              aria-hidden
+              fill
+              sizes="100vw"
+              className="pointer-events-none scale-110 select-none object-cover opacity-40 blur-2xl"
+            />
+
+            {/* The photo itself — `object-contain` so nothing is ever cropped. */}
             <Image
               src={photo.src}
               alt={photo.alt}
               fill
               priority={index === 0}
-              sizes="(min-width: 1024px) 80vw, 100vw"
-              className="pointer-events-none select-none object-cover"
+              sizes="(min-width: 768px) 28rem, 100vw"
+              className="pointer-events-none select-none object-contain"
             />
           </motion.div>
         </AnimatePresence>
-
-        {/* Caption scrim */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/70 to-transparent"
-        />
-        <p className="pointer-events-none absolute bottom-4 left-5 pr-32 text-sm font-medium text-white/90">
-          {photo.alt}
-        </p>
 
         {count > 1 && (
           <>
@@ -155,7 +166,7 @@ export function PhotoSlideshow({ photos }: { photos: Photo[] }) {
                 type="button"
                 role="tab"
                 aria-selected={i === index}
-                aria-label={`Photo ${i + 1}: ${p.alt}`}
+                aria-label={`Photo ${i + 1} of ${count}`}
                 onClick={() => go(i, i > index ? 1 : -1)}
                 className={cn(
                   "h-1.5 rounded-full transition-all duration-300",
@@ -167,22 +178,24 @@ export function PhotoSlideshow({ photos }: { photos: Photo[] }) {
             ))}
           </div>
 
-          {!reduce && (
-            <button
-              type="button"
-              onClick={() => setPaused((p) => !p)}
-              aria-label={paused ? "Resume slideshow" : "Pause slideshow"}
-              className="inline-flex items-center gap-1.5 font-mono text-[0.6875rem] uppercase tracking-widest text-subtle transition-colors hover:text-foreground"
-            >
-              {paused ? <Play className="size-3" /> : <Pause className="size-3" />}
-              {paused ? "Play" : "Pause"}
-            </button>
-          )}
+          {/* Always rendered — hiding it based on reduced motion would make
+              the server and client markup disagree. */}
+          <button
+            type="button"
+            onClick={() => setPaused((p) => !p)}
+            aria-label={paused ? "Resume slideshow" : "Pause slideshow"}
+            className="inline-flex items-center gap-1.5 font-mono text-[0.6875rem] uppercase tracking-widest text-subtle transition-colors hover:text-foreground"
+          >
+            {paused ? <Play className="size-3" /> : <Pause className="size-3" />}
+            {paused ? "Play" : "Pause"}
+          </button>
         </div>
       )}
 
+      {/* No visible captions by choice — this keeps position announced for
+          screen readers, which would otherwise get no feedback on advance. */}
       <p ref={liveRef} className="sr-only" aria-live="polite">
-        Photo {index + 1} of {count}: {photo.alt}
+        Photo {index + 1} of {count}
       </p>
     </div>
   );

@@ -86,7 +86,10 @@ export async function POST(request: Request) {
       const resend = new Resend(process.env.RESEND_API_KEY);
 
       const { error } = await resend.emails.send({
-        from: process.env.CONTACT_FROM_EMAIL ?? "portfolio@resend.dev",
+        // `onboarding@resend.dev` is Resend's shared test sender and works
+        // with no DNS setup — but it only delivers to the account's own
+        // address. Switch to your domain once it is verified.
+        from: process.env.CONTACT_FROM_EMAIL ?? "onboarding@resend.dev",
         to,
         replyTo: email,
         subject: `[Portfolio] ${heading}`,

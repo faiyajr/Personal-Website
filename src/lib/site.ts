@@ -30,19 +30,19 @@ export const site = {
   title: "Computer Engineering Student & Software Engineer",
   headline: "Turning complex problems into usable solutions.",
   intro:
-    "Hey! I'm Faiyaj. I like dabbling in building, programming, playing football, going to the gym, and the occasional late-night gaming session. Hope you enjoy your stay.",
+    "Hey! I'm Faiyaj. I like dabbling in building, programming, playing football, going to the gym, and the occasional late-night gaming session. Hope you enjoy your stay!",
 
   /**
    * Cycled through by the decode effect under the hero heading.
    * Each one has to read correctly after "I'm Faiyaj,".
    */
   headlinePhrases: [
-    "a Computer Engineering student.",
-    "a Software Engineering Intern at Bosch.",
-    "the co-founder of Saf.",
-    "building a sub-millisecond matching engine.",
-    "designing an autonomous drone from scratch.",
-    "usually at the gym or on a football pitch.",
+    "a Computer Engineering student at Michigan.",
+    "a software engineer.",
+    "a builder.",
+    "a tinkerer.",
+    "a designer.",
+    "an entrepreneur.",
   ],
 
   location: "Ann Arbor, MI",

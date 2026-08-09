@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { Music } from "lucide-react";
+import { Music, Search } from "lucide-react";
 
-import type { ManualTrack } from "@/lib/about";
+import type { LikedTrack } from "@/lib/music";
 import type { SpotifyPayload, Track } from "@/lib/spotify";
-import { cn } from "@/lib/utils";
 
 /**
  * "What I'm listening to".
@@ -14,9 +13,15 @@ import { cn } from "@/lib/utils";
  * Live from the Spotify API when it is available, fetched client-side so the
  * data stays current without a redeploy. When the API is unavailable — no
  * credentials, or the app is blocked from the Web API for lack of Premium —
- * it falls back to the hand-written `onRepeat` list instead of vanishing.
+ * it falls back to the full liked-songs library parsed from the CSV export.
  */
-export function SpotifyPanel({ fallback = [] }: { fallback?: ManualTrack[] }) {
+export function SpotifyPanel({
+  library = [],
+  artists = [],
+}: {
+  library?: LikedTrack[];
+  artists?: string[];
+}) {
   const [data, setData] = useState<SpotifyPayload | null>(null);
   const [failed, setFailed] = useState(false);
 
@@ -37,18 +42,17 @@ export function SpotifyPanel({ fallback = [] }: { fallback?: ManualTrack[] }) {
     };
   }, []);
 
-  if (!data && !failed) return <SkeletonPanel />;
+  // The library renders immediately, server-side included — no skeleton and
+  // no flash. Live data, if it ever arrives, upgrades the panel in place.
+  const live = !failed && data?.configured ? data : null;
+  const hasLive = Boolean(live && (live.nowPlaying || live.topTracks.length > 0));
 
-  // API unavailable — show the hand-written list if there is one.
-  if (failed || !data?.configured) {
-    return <FallbackPanel tracks={fallback} />;
-  }
+  if (!hasLive) return <LibraryPanel tracks={library} artists={artists} />;
 
-  const { nowPlaying, topTracks } = data;
-  if (!nowPlaying && topTracks.length === 0) return <FallbackPanel tracks={fallback} />;
+  const { nowPlaying, topTracks } = live!;
 
   return (
-    <div className="overflow-hidden rounded-card border border-border bg-surface/40">
+    <div className="overflow-hidden rounded-card border border-border bg-surface/50 backdrop-blur-sm">
       {nowPlaying && (
         <div className="flex items-center gap-4 border-b border-border p-5">
           <AlbumArt src={nowPlaying.albumArt} alt={`${nowPlaying.album} album art`} size={56} />
@@ -93,38 +97,111 @@ export function SpotifyPanel({ fallback = [] }: { fallback?: ManualTrack[] }) {
   );
 }
 
-/** Rendered when the live API is unavailable. */
-function FallbackPanel({ tracks }: { tracks: ManualTrack[] }) {
-  if (tracks.length === 0) return null;
+/**
+ * The full liked-songs library: a searchable, scrollable list.
+ *
+ * 474 rows is too many to skim, so the filter is not a nicety — it is what
+ * makes the list usable. Filtering happens on the already-loaded array, so
+ * there is no request per keystroke.
+ */
+function LibraryPanel({
+  tracks,
+  artists,
+}: {
+  tracks: LikedTrack[];
+  artists: string[];
+}) {
+  const [query, setQuery] = useState("");
+
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return tracks;
+    return tracks.filter(
+      (t) => t.title.toLowerCase().includes(q) || t.artist.toLowerCase().includes(q),
+    );
+  }, [tracks, query]);
+
+  if (tracks.length === 0 && artists.length === 0) return null;
 
   return (
-    <div className="overflow-hidden rounded-card border border-border bg-surface/50 p-5 backdrop-blur-sm">
-      <p className="eyebrow mb-4 flex items-center gap-2">
-        <Music className="size-3" />
-        On repeat
-      </p>
-      <ol className="space-y-3">
-        {tracks.map((track, i) => (
-          <li key={`${track.title}-${track.artist}`} className="flex items-baseline gap-3">
-            <span className="w-4 shrink-0 font-mono text-xs text-subtle">{i + 1}</span>
-            <div className="min-w-0 flex-1">
-              {track.url ? (
+    <div className="overflow-hidden rounded-card border border-border bg-surface/50 backdrop-blur-sm">
+      <div className="flex items-center justify-between gap-3 border-b border-border p-5 pb-4">
+        <p className="eyebrow flex items-center gap-2">
+          <Music className="size-3" />
+          Liked songs
+        </p>
+        <span className="font-mono text-[0.6875rem] text-subtle">
+          {query ? `${visible.length} / ${tracks.length}` : tracks.length}
+        </span>
+      </div>
+
+      {tracks.length > 0 && (
+        <>
+          <div className="relative border-b border-border p-3">
+            <Search
+              aria-hidden
+              className="pointer-events-none absolute left-6 top-1/2 size-3.5 -translate-y-1/2 text-subtle"
+            />
+            <input
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search songs or artists"
+              aria-label="Search liked songs"
+              className="w-full rounded-lg border border-transparent bg-transparent py-1.5 pl-8 pr-2 text-sm text-foreground placeholder:text-subtle focus:border-border focus:outline-none focus:ring-2 focus:ring-accent/25"
+            />
+          </div>
+
+          <ol className="scroll-region max-h-[22rem] overflow-y-auto p-2">
+            {visible.map((track, i) => (
+              <li key={`${track.id}-${i}`}>
                 <a
-                  href={track.url}
+                  href={
+                    track.id
+                      ? `https://open.spotify.com/track/${track.id}`
+                      : undefined
+                  }
                   target="_blank"
                   rel="noreferrer noopener"
-                  className="block truncate text-sm text-foreground hover:text-accent"
+                  className="flex items-baseline gap-3 rounded-lg px-3 py-2 transition-colors hover:bg-surface-raised"
                 >
-                  {track.title}
+                  <span className="w-7 shrink-0 text-right font-mono text-[0.6875rem] text-subtle">
+                    {i + 1}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm text-foreground">
+                      {track.title}
+                    </span>
+                    <span className="block truncate text-xs text-muted">{track.artist}</span>
+                  </span>
                 </a>
-              ) : (
-                <p className="truncate text-sm text-foreground">{track.title}</p>
-              )}
-              <p className="truncate text-xs text-muted">{track.artist}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
+              </li>
+            ))}
+
+            {visible.length === 0 && (
+              <li className="px-3 py-8 text-center text-sm text-muted">
+                Nothing matches “{query}”.
+              </li>
+            )}
+          </ol>
+        </>
+      )}
+
+      {artists.length > 0 && (
+        <div className="border-t border-border p-5">
+          <p className="eyebrow mb-3">Most saved</p>
+          <ul className="flex flex-wrap gap-1.5">
+            {artists.map((artist) => (
+              <li
+                key={artist}
+                className="rounded-full border border-border px-2.5 py-1 font-mono text-[0.6875rem] text-muted"
+              >
+                {artist}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
@@ -149,15 +226,7 @@ function TrackRow({ track, rank }: { track: Track; rank: number }) {
   );
 }
 
-function AlbumArt({
-  src,
-  alt,
-  size,
-}: {
-  src: string | null;
-  alt: string;
-  size: number;
-}) {
+function AlbumArt({ src, alt, size }: { src: string | null; alt: string; size: number }) {
   if (!src) {
     return (
       <div
@@ -193,27 +262,5 @@ function EqualizerBars() {
         />
       ))}
     </span>
-  );
-}
-
-function SkeletonPanel() {
-  return (
-    <div className="overflow-hidden rounded-card border border-border bg-surface/40 p-5">
-      <div className="flex items-center gap-4">
-        <div className="size-14 animate-pulse rounded-md bg-surface" />
-        <div className="flex-1 space-y-2">
-          <div className="h-3 w-24 animate-pulse rounded bg-surface" />
-          <div className="h-4 w-40 animate-pulse rounded bg-surface" />
-        </div>
-      </div>
-      <div className="mt-6 space-y-3">
-        {[0, 1, 2].map((i) => (
-          <div key={i} className="flex items-center gap-3">
-            <div className="size-10 animate-pulse rounded-md bg-surface" />
-            <div className={cn("h-3 animate-pulse rounded bg-surface", "w-2/3")} />
-          </div>
-        ))}
-      </div>
-    </div>
   );
 }

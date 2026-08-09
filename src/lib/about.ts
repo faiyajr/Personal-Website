@@ -77,23 +77,3 @@ export const watches: Watch[] = [
 
 /** Line above the watches grid. */
 export const watchesIntro = "I've watched these too much for my own good…";
-
-export type ManualTrack = {
-  title: string;
-  artist: string;
-  /** Optional Spotify link — "Share → Copy Song Link" on any track. */
-  url?: string;
-};
-
-/**
- * Hand-written fallback for the "on repeat" panel.
- *
- * The live Spotify API needs a Premium account; without one the Web API
- * refuses the app entirely. This list renders instead whenever the API is
- * unavailable, so the section is never empty. If Spotify does start working,
- * the live data takes over and this is ignored.
- */
-export const onRepeat: ManualTrack[] = [
-  { title: "Replace me", artist: "With a real track" },
-  { title: "And me", artist: "Five or so reads best" },
-];

@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion, type Variants } from "motion/react";
+import { motion, type Variants } from "motion/react";
 
+import { useMotionScale } from "@/components/motion/use-motion-scale";
 import { cn } from "@/lib/utils";
 
 type RevealProps = {
@@ -15,13 +16,13 @@ type RevealProps = {
 };
 
 const OFFSET = 28;
+const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
  * Fade-and-rise on first scroll into view. Fires once.
  *
- * Every motion component in this folder checks `useReducedMotion()` and
- * renders the final state immediately when the visitor has asked for reduced
- * motion — the content is never gated behind an animation that will not run.
+ * Reduced motion is handled by scaling the duration to zero rather than by
+ * rendering different markup — see `useMotionScale`.
  */
 export function Reveal({
   children,
@@ -30,7 +31,7 @@ export function Reveal({
   from = "bottom",
   as = "div",
 }: RevealProps) {
-  const reduce = useReducedMotion();
+  const scale = useMotionScale();
   const Component = motion[as];
 
   const offset =
@@ -42,30 +43,30 @@ export function Reveal({
           ? { x: OFFSET }
           : {};
 
-  if (reduce) return <Component className={className}>{children}</Component>;
-
   return (
     <Component
       className={className}
       initial={{ opacity: 0, ...offset }}
       whileInView={{ opacity: 1, x: 0, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.7 * scale, delay: delay * scale, ease: EASE }}
     >
       {children}
     </Component>
   );
 }
 
-const staggerParent: Variants = {
+const staggerParent = (scale: number): Variants => ({
   hidden: {},
-  show: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
-};
+  show: {
+    transition: { staggerChildren: 0.08 * scale, delayChildren: 0.05 * scale },
+  },
+});
 
-const staggerChild: Variants = {
+const staggerChild = (scale: number): Variants => ({
   hidden: { opacity: 0, y: OFFSET },
-  show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
-};
+  show: { opacity: 1, y: 0, transition: { duration: 0.7 * scale, ease: EASE } },
+});
 
 /** Wrap a list; each `<StaggerItem>` inside animates in sequence. */
 export function Stagger({
@@ -77,15 +78,13 @@ export function Stagger({
   className?: string;
   as?: "div" | "ul" | "section";
 }) {
-  const reduce = useReducedMotion();
+  const scale = useMotionScale();
   const Component = motion[as];
-
-  if (reduce) return <Component className={className}>{children}</Component>;
 
   return (
     <Component
       className={className}
-      variants={staggerParent}
+      variants={staggerParent(scale)}
       initial="hidden"
       whileInView="show"
       viewport={{ once: true, margin: "-60px" }}
@@ -104,13 +103,11 @@ export function StaggerItem({
   className?: string;
   as?: "div" | "li" | "article";
 }) {
-  const reduce = useReducedMotion();
+  const scale = useMotionScale();
   const Component = motion[as];
 
-  if (reduce) return <Component className={cn(className)}>{children}</Component>;
-
   return (
-    <Component className={cn(className)} variants={staggerChild}>
+    <Component className={cn(className)} variants={staggerChild(scale)}>
       {children}
     </Component>
   );

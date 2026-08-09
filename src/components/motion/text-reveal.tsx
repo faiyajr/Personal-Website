@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 
+import { useMotionScale } from "@/components/motion/use-motion-scale";
 import { cn } from "@/lib/utils";
 
 /**
@@ -21,10 +22,8 @@ export function TextReveal({
   delay?: number;
   as?: "h1" | "h2" | "p";
 }) {
-  const reduce = useReducedMotion();
+  const scale = useMotionScale();
   const words = text.split(" ");
-
-  if (reduce) return <Tag className={className}>{text}</Tag>;
 
   return (
     <Tag className={className}>
@@ -37,8 +36,8 @@ export function TextReveal({
               initial={{ y: "110%" }}
               animate={{ y: 0 }}
               transition={{
-                duration: 0.85,
-                delay: delay + i * 0.06,
+                duration: 0.85 * scale,
+                delay: (delay + i * 0.06) * scale,
                 ease: [0.16, 1, 0.3, 1],
               }}
             >
@@ -61,10 +60,8 @@ export function TextRevealOnScroll({
   className?: string;
   as?: "h1" | "h2" | "p";
 }) {
-  const reduce = useReducedMotion();
+  const scale = useMotionScale();
   const words = text.split(" ");
-
-  if (reduce) return <Tag className={cn(className)}>{text}</Tag>;
 
   return (
     <Tag className={cn(className)}>
@@ -75,7 +72,7 @@ export function TextRevealOnScroll({
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: "-100px" }}
-        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.05 } } }}
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.05 * scale } } }}
       >
         {words.map((word, i) => (
           <span key={`${word}-${i}`} className="overflow-hidden py-[0.06em] pr-[0.26em]">
@@ -83,7 +80,7 @@ export function TextRevealOnScroll({
               className="inline-block will-change-transform"
               variants={{
                 hidden: { y: "110%" },
-                show: { y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+                show: { y: 0, transition: { duration: 0.8 * scale, ease: [0.16, 1, 0.3, 1] } },
               }}
             >
               {word}

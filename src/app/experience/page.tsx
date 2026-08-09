@@ -3,7 +3,7 @@ import { Download, GraduationCap, Trophy } from "lucide-react";
 
 import { ExperienceTimeline } from "@/components/experience-timeline";
 import { Reveal } from "@/components/motion/reveal";
-import { TextReveal } from "@/components/motion/text-reveal";
+import { BlurReveal } from "@/components/motion/blur-reveal";
 import { SectionHeading } from "@/components/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -29,7 +29,7 @@ export default function ExperiencePage() {
             current
           </p>
         </Reveal>
-        <TextReveal
+        <BlurReveal
           text="Experience."
           as="h1"
           className="font-display text-display-lg text-foreground"

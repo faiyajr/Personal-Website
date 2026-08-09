@@ -4,14 +4,15 @@ import { ArrowUpRight, Download } from "lucide-react";
 
 import { ContactForm } from "@/components/contact-form";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
-import { TextReveal } from "@/components/motion/text-reveal";
+import { BlurReveal } from "@/components/motion/blur-reveal";
 import { PhotoSlideshow } from "@/components/photo-slideshow";
 import { SectionHeading } from "@/components/section-heading";
 import { SpotifyPanel } from "@/components/spotify-panel";
 import { WatchesGrid } from "@/components/watches-grid";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
-import { interests, onRepeat, watchesIntro } from "@/lib/about";
+import { interests, watchesIntro } from "@/lib/about";
+import { getMusicLibrary } from "@/lib/music";
 import { getPhotos } from "@/lib/photos";
 import { getWatches } from "@/lib/watches";
 import { skills } from "@/lib/resume";
@@ -26,6 +27,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   const photos = getPhotos();
   const watches = getWatches();
+  const music = getMusicLibrary();
 
   return (
     <div className="container-page py-16 md:py-24">
@@ -35,7 +37,7 @@ export default function AboutPage() {
           <Reveal>
             <p className="eyebrow mb-4">About</p>
           </Reveal>
-          <TextReveal
+          <BlurReveal
             text={site.name}
             as="h1"
             className="font-display text-display-lg text-foreground"
@@ -117,7 +119,7 @@ export default function AboutPage() {
           </Stagger>
 
           <Reveal from="right" delay={0.1} className="lg:col-span-5">
-            <SpotifyPanel fallback={onRepeat} />
+            <SpotifyPanel library={music.tracks} artists={music.topArtists} />
           </Reveal>
         </div>
       </section>

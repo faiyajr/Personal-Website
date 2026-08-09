@@ -7,7 +7,7 @@ import { ArrowLeft, ArrowUpRight, Globe } from "lucide-react";
 import { GithubIcon } from "@/components/icons";
 import { MdxContent } from "@/components/mdx-content";
 import { Reveal } from "@/components/motion/reveal";
-import { TextReveal } from "@/components/motion/text-reveal";
+import { BlurReveal } from "@/components/motion/blur-reveal";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -75,7 +75,7 @@ export default async function ProjectPage({ params }: PageProps) {
             )}
           </div>
 
-          <TextReveal
+          <BlurReveal
             text={project.title}
             as="h1"
             className="font-display text-display-lg text-foreground"

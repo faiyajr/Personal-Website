@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 
+import { useMotionEnabled, useMotionScale } from "@/components/motion/use-motion-scale";
 import type { Watch } from "@/lib/about";
 import { cn } from "@/lib/utils";
 
@@ -29,10 +30,13 @@ export function WatchesGrid({ watches }: { watches: Watch[] }) {
 }
 
 function PosterCard({ watch, index }: { watch: Watch; index: number }) {
-  const reduce = useReducedMotion();
+  // Only gates the hover tilt, which lives in an event handler — it never
+  // affects rendered markup, so it is safe to read here.
+  const animate = useMotionEnabled();
+  const scale = useMotionScale();
 
   function handleMove(event: React.MouseEvent<HTMLLIElement>) {
-    if (reduce) return;
+    if (!animate) return;
     const el = event.currentTarget;
     const rect = el.getBoundingClientRect();
     // -0.5..0.5 from the centre, converted to a few degrees of tilt.
@@ -51,12 +55,12 @@ function PosterCard({ watch, index }: { watch: Watch; index: number }) {
     <motion.li
       onMouseMove={handleMove}
       onMouseLeave={handleLeave}
-      initial={reduce ? false : { opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{
-        duration: 0.6,
-        delay: Math.min(index, 8) * 0.05,
+        duration: 0.6 * scale,
+        delay: Math.min(index, 8) * 0.05 * scale,
         ease: [0.16, 1, 0.3, 1],
       }}
       className="group [perspective:900px]"

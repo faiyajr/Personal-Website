@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useMotionValue, useSpring, useReducedMotion } from "motion/react";
+import { motion, useMotionValue, useSpring } from "motion/react";
+
+import { useMotionEnabled } from "@/components/motion/use-motion-scale";
 
 /**
  * Pulls its child gently toward the cursor on hover. Pointer-device only —
@@ -18,7 +20,7 @@ export function Magnetic({
   className?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const reduce = useReducedMotion();
+  const animate = useMotionEnabled();
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -26,7 +28,7 @@ export function Magnetic({
   const springY = useSpring(y, { stiffness: 200, damping: 18, mass: 0.4 });
 
   function handleMove(event: React.MouseEvent<HTMLSpanElement>) {
-    if (reduce || !ref.current) return;
+    if (!animate || !ref.current) return;
     if (!window.matchMedia("(hover: hover)").matches) return;
 
     const rect = ref.current.getBoundingClientRect();

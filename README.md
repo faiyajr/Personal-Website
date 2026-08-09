@@ -125,7 +125,7 @@ Four things beyond the resume, each edited in a different place:
 | Photos | Drop files in `public/images/me/` — no config. Rendered as an auto-advancing slideshow. Filenames become alt text, so name them `hocking-hills.png`, not `IMG_4821.jpg` |
 | Interests | `interests` in `src/lib/about.ts` |
 | Watches | `watches` in `src/lib/about.ts`. Posters live in `public/images/watches/`. An entry whose poster file is missing is skipped rather than rendering broken, so you can add the entry before the image |
-| On repeat | `onRepeat` in `src/lib/about.ts` (fallback), or the live Spotify API — see below |
+| On repeat | `onRepeat` and `topArtists` in `src/lib/about.ts`, or the live Spotify API — see below. Refresh by exporting your liked songs and copying the newest rows in |
 
 Each section hides itself when empty, so you can fill them in one at a time.
 
@@ -181,7 +181,11 @@ It reserves its final height up front, so nothing below it shifts between phrase
 
 Pick one provider and set it in `.env.local` (and in Vercel → Settings → Environment Variables):
 
-**Resend** — `RESEND_API_KEY`, `CONTACT_FROM_EMAIL`, `CONTACT_TO_EMAIL`. Free tier covers 3k emails/month. Verify a sending domain, or use `onboarding@resend.dev` while testing.
+**Resend** — `RESEND_API_KEY`, `CONTACT_FROM_EMAIL`, `CONTACT_TO_EMAIL`. Free tier covers 3k emails/month.
+
+`CONTACT_FROM_EMAIL` is the **From:** address on the mail the form sends *you* — not the visitor's address. It has to be at a domain verified in Resend. `onboarding@resend.dev` is Resend's shared test sender: no DNS setup, but it only delivers to your own Resend account address. Once `faiyajr.dev` is verified, switch it to `portfolio@faiyajr.dev`.
+
+Reply-To is always set to whoever filled the form, so hitting reply in your inbox reaches them directly.
 
 **Formspree** — `FORMSPREE_ENDPOINT` only. No domain setup.
 

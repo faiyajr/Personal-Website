@@ -1,9 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 
 import { BentoGrid } from "@/components/bento-grid";
+import { useMotionScale } from "@/components/motion/use-motion-scale";
 import { EmptyState } from "@/components/empty-state";
 import { ProjectCard } from "@/components/project-card";
 import type { Project } from "@/lib/content";
@@ -19,7 +20,7 @@ export function ProjectsExplorer({
   tech: string[];
 }) {
   const [filter, setFilter] = useState<string>(ALL);
-  const reduce = useReducedMotion();
+  const scale = useMotionScale();
 
   const visible = useMemo(
     () => (filter === ALL ? projects : projects.filter((p) => p.tech.includes(filter))),
@@ -71,7 +72,7 @@ export function ProjectsExplorer({
           {visible.map((project, i) => (
             <motion.div
               key={project.slug}
-              layout={!reduce}
+              layout
               className={cn(
                 project.size === "wide"
                   ? "md:col-span-6"
@@ -83,10 +84,10 @@ export function ProjectsExplorer({
                         ? "md:col-span-2"
                         : "md:col-span-3",
               )}
-              initial={reduce ? false : { opacity: 0, scale: 0.97 }}
+              initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={reduce ? undefined : { opacity: 0, scale: 0.97 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              exit={{ opacity: 0, scale: 0.97 }}
+              transition={{ duration: 0.35 * scale, ease: [0.16, 1, 0.3, 1] }}
             >
               <ProjectCard project={project} priority={i < 2} />
             </motion.div>

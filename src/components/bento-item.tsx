@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 
+import { useMotionScale } from "@/components/motion/use-motion-scale";
 import type { CardSize } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
@@ -29,22 +30,19 @@ export function BentoItem({
   className?: string;
   children: React.ReactNode;
 }) {
-  const reduce = useReducedMotion();
-  const classes = cn(spanClasses[size], className);
-
-  if (reduce) return <div className={classes}>{children}</div>;
+  const scale = useMotionScale();
 
   return (
     <motion.div
-      className={classes}
+      className={cn(spanClasses[size], className)}
       initial={{ opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{
-        duration: 0.75,
+        duration: 0.75 * scale,
         // Cap the stagger so cards far down the page do not sit blank while
         // a long delay chain plays out.
-        delay: Math.min(index, 5) * 0.07,
+        delay: Math.min(index, 5) * 0.07 * scale,
         ease: [0.16, 1, 0.3, 1],
       }}
     >

@@ -1,27 +1,31 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 
 import { Magnetic } from "@/components/motion/magnetic";
-import { ScrambleText } from "@/components/motion/scramble-text";
+import { BlurCycle } from "@/components/motion/blur-cycle";
+import { useMotionScale } from "@/components/motion/use-motion-scale";
 import { StructCard } from "@/components/struct-card";
 import { buttonVariants } from "@/components/ui/button";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 export function Hero() {
-  const reduce = useReducedMotion();
+  const scale = useMotionScale();
 
-  const fadeUp = (delay: number) =>
-    reduce
-      ? {}
-      : {
-          initial: { opacity: 0, y: 16 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] as const },
-        };
+  // `initial` stays constant so SSR and hydration agree; only the timing
+  // responds to reduced motion. See `useMotionScale`.
+  const fadeUp = (delay: number) => ({
+    initial: { opacity: 0, y: 16 },
+    animate: { opacity: 1, y: 0 },
+    transition: {
+      duration: 0.8 * scale,
+      delay: delay * scale,
+      ease: [0.16, 1, 0.3, 1] as const,
+    },
+  });
 
   return (
     <section className="relative overflow-hidden">
@@ -49,11 +53,7 @@ export function Hero() {
             >
               I&apos;m <span className="text-accent">{site.firstName}</span>,
               <br />
-              <ScrambleText
-                phrases={site.headlinePhrases}
-                className="text-foreground"
-                cursorClassName="bg-accent"
-              />
+              <BlurCycle phrases={site.headlinePhrases} className="text-foreground" />
             </motion.h1>
 
             <motion.p {...fadeUp(0.22)} className="mt-8 max-w-xl text-lead text-muted">
@@ -101,13 +101,13 @@ export function Hero() {
 
           {/* ── Right: the C++ struct ── */}
           <motion.div
-            {...(reduce
-              ? {}
-              : {
-                  initial: { opacity: 0, y: 24, rotate: -1 },
-                  animate: { opacity: 1, y: 0, rotate: 0 },
-                  transition: { duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] as const },
-                })}
+            initial={{ opacity: 0, y: 24, rotate: -1 }}
+            animate={{ opacity: 1, y: 0, rotate: 0 }}
+            transition={{
+              duration: 0.9 * scale,
+              delay: 0.25 * scale,
+              ease: [0.16, 1, 0.3, 1],
+            }}
             className="lg:col-span-5"
           >
             <StructCard />

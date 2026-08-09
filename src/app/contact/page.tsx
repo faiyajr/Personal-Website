@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 
 import { ContactForm } from "@/components/contact-form";
 import { Reveal } from "@/components/motion/reveal";
-import { TextReveal } from "@/components/motion/text-reveal";
+import { BlurReveal } from "@/components/motion/blur-reveal";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function ContactPage() {
           <Reveal>
             <p className="eyebrow mb-4">Contact</p>
           </Reveal>
-          <TextReveal
+          <BlurReveal
             text="Say hello."
             as="h1"
             className="font-display text-display-lg text-foreground"

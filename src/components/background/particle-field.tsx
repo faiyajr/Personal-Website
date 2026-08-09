@@ -42,7 +42,11 @@ export function ParticleField() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // `.force-motion` is the development-only preview switch — see
+    // `useMotionScale`. Absent in production, so a real reduced-motion
+    // preference always wins there.
+    const forced = document.documentElement.classList.contains("force-motion");
+    if (!forced && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;

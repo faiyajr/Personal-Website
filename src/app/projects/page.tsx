@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { ProjectsExplorer } from "@/components/projects-explorer";
-import { TextReveal } from "@/components/motion/text-reveal";
+import { BlurReveal } from "@/components/motion/blur-reveal";
 import { Reveal } from "@/components/motion/reveal";
 import { getAllProjects, getAllTech } from "@/lib/content";
 
@@ -23,7 +23,7 @@ export default function ProjectsPage() {
             {projects.length} {projects.length === 1 ? "project" : "projects"}
           </p>
         </Reveal>
-        <TextReveal
+        <BlurReveal
           text="Work."
           as="h1"
           className="font-display text-display-lg text-foreground"

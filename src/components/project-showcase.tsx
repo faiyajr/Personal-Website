@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, Globe } from "lucide-react";
 
 import { GithubIcon } from "@/components/icons";
+import { useMotionScale } from "@/components/motion/use-motion-scale";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import type { Project } from "@/lib/content";
@@ -31,7 +32,7 @@ const DOTS = [
 
 export function ProjectShowcase({ projects }: { projects: Project[] }) {
   const [active, setActive] = useState(0);
-  const reduce = useReducedMotion();
+  const scale = useMotionScale();
 
   if (projects.length === 0) return null;
 
@@ -102,10 +103,10 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={project.slug}
-            initial={reduce ? false : { opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={reduce ? undefined : { opacity: 0, y: -8 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.35 * scale, ease: [0.16, 1, 0.3, 1] }}
             className="grid lg:grid-cols-2"
           >
             <div className="relative aspect-[16/10] overflow-hidden bg-surface lg:aspect-auto lg:min-h-[26rem]">
