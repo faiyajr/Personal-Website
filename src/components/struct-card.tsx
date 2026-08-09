@@ -43,23 +43,28 @@ function Value({ value }: { value: StructField["value"] }) {
  * lockstep, which reads as a single moving block instead of ambient drift.
  */
 const GLYPHS = [
-  { symbol: "{ }", side: "left", at: "top-[7%]", tone: "text-accent/70", dur: "7s", delay: "0s" },
-  { symbol: "::", side: "right", at: "top-[13%]", tone: "text-subtle", dur: "8.5s", delay: "-2.4s" },
-  { symbol: "#", side: "left", at: "top-[45%]", tone: "text-subtle", dur: "9.5s", delay: "-4.1s" },
-  { symbol: "&", side: "right", at: "top-[52%]", tone: "text-accent-2/70", dur: "7.5s", delay: "-1.2s" },
-  { symbol: "01", side: "left", at: "bottom-[10%]", tone: "text-subtle", dur: "8s", delay: "-5.6s" },
-  { symbol: "->", side: "right", at: "bottom-[5%]", tone: "text-accent/70", dur: "10s", delay: "-3.3s" },
+  { symbol: "{ }", side: "left", at: "top-[7%]", tone: "text-accent/70", dur: "7s", delay: "0s", onPhone: true },
+  { symbol: "::", side: "right", at: "top-[13%]", tone: "text-subtle", dur: "8.5s", delay: "-2.4s", onPhone: true },
+  { symbol: "#", side: "left", at: "top-[45%]", tone: "text-subtle", dur: "9.5s", delay: "-4.1s", onPhone: false },
+  { symbol: "&", side: "right", at: "top-[52%]", tone: "text-accent-2/70", dur: "7.5s", delay: "-1.2s", onPhone: false },
+  { symbol: "01", side: "left", at: "bottom-[10%]", tone: "text-subtle", dur: "8s", delay: "-5.6s", onPhone: true },
+  { symbol: "->", side: "right", at: "bottom-[5%]", tone: "text-accent/70", dur: "10s", delay: "-3.3s", onPhone: true },
 ] as const;
 
-function Glyph({ symbol, side, at, tone, dur, delay }: (typeof GLYPHS)[number]) {
+function Glyph({ symbol, side, at, tone, dur, delay, onPhone }: (typeof GLYPHS)[number]) {
   return (
     <span
       className={cn(
-        "absolute flex items-center gap-1.5",
+        "absolute items-center gap-1 md:gap-1.5",
         at,
+        // The four corner glyphs survive down to the smallest screens; the two
+        // mid-height ones drop out, because on a phone they land beside the
+        // densest part of the snippet and read as clutter rather than accent.
+        onPhone ? "flex" : "hidden md:flex",
         // `right-full` / `left-full` pins the marker flush outside the card
         // edge, so no offset needs recomputing if the card changes width.
-        side === "left" ? "right-full mr-2" : "ml-2 left-full flex-row-reverse",
+        // The tighter phone margin keeps it inside a 1.5rem page gutter.
+        side === "left" ? "right-full mr-1 md:mr-2" : "left-full ml-1 flex-row-reverse md:ml-2",
       )}
       // Inline because every glyph carries a different duration and phase.
       // The reduced-motion rule in globals.css still overrides this.
@@ -68,7 +73,12 @@ function Glyph({ symbol, side, at, tone, dur, delay }: (typeof GLYPHS)[number]) 
       {/* nowrap because an absolutely positioned box with only one horizontal
           offset set sizes to min-content, which would break `{ }` at its
           space and stack it onto two lines. */}
-      <span className={cn("whitespace-nowrap font-mono text-[0.625rem] leading-none", tone)}>
+      <span
+        className={cn(
+          "whitespace-nowrap font-mono text-[0.5rem] leading-none opacity-80 md:text-[0.625rem] md:opacity-100",
+          tone,
+        )}
+      >
         {symbol}
       </span>
 
@@ -85,11 +95,10 @@ export function StructCard({ className }: { className?: string }) {
     // The wrapper is the positioning context for the glyphs and must not clip,
     // so `overflow-hidden` stays on the card itself.
     <div className={cn("relative", className)}>
-      {/* Works stacked as well as beside the intro: once the card goes full
-          width the glyphs hang in the page gutter, which is 2.5rem from md up.
-          Below md that gutter drops to 1.5rem and they'd touch the screen
-          edge, so that is where they stop. */}
-      <div aria-hidden className="pointer-events-none hidden md:block">
+      {/* Hangs off whichever space the layout leaves beside the card: the grid
+          gap in the two-column hero, the page gutter once it stacks. Each
+          glyph decides for itself how far down it scales — see GLYPHS. */}
+      <div aria-hidden className="pointer-events-none">
         {GLYPHS.map((glyph) => (
           <Glyph key={glyph.symbol} {...glyph} />
         ))}
