@@ -6,6 +6,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ScrollProgress } from "@/components/motion/scroll-progress";
+import { OverflowProbe } from "@/components/dev/overflow-probe";
 import { site } from "@/lib/site";
 
 import "./globals.css";
@@ -103,6 +104,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <main id="main">{children}</main>
             <SiteFooter />
           </div>
+
+          {/* Temporary — remove with the component once the mobile overflow is
+              traced. Renders nothing without `?debug=overflow`. */}
+          <OverflowProbe />
         </ThemeProvider>
       </body>
     </html>
