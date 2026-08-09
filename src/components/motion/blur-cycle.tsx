@@ -54,7 +54,13 @@ export function BlurCycle({
   }, [index, phrases, animate, words.length]);
 
   return (
-    <span className={cn("grid", className)}>
+    // `max-w-full` + `min-w-0` are load-bearing, not decoration. A grid column
+    // sized `auto` takes its growth limit from the max-content of its items --
+    // here the whole phrase unwrapped -- and only gets capped at the container
+    // width if the available space resolves as definite. Pinning the max width
+    // and letting the items shrink past min-content makes the cap explicit
+    // instead of relying on that resolution.
+    <span className={cn("grid min-w-0 max-w-full", className)}>
       {/* Every phrase, invisible and stacked, so the cell is always as tall as
           the tallest one and the line below never jumps between phrases.
 
@@ -65,7 +71,11 @@ export function BlurCycle({
           height, and on narrow screens the longest phrase wrapped to one more
           line than the cell had room for and spilled onto the paragraph. */}
       {phrases.map((phrase) => (
-        <span key={phrase} aria-hidden className="invisible flex flex-wrap [grid-area:1/1]">
+        <span
+          key={phrase}
+          aria-hidden
+          className="invisible flex min-w-0 flex-wrap [grid-area:1/1]"
+        >
           {phrase.split(" ").map((word, i) => (
             <span key={`${word}-${i}`} className="inline-block pr-[0.26em]">
               {word}
@@ -74,7 +84,7 @@ export function BlurCycle({
         </span>
       ))}
 
-      <span className="[grid-area:1/1]">
+      <span className="min-w-0 [grid-area:1/1]">
         {/* Announce only the settled phrase, not each word as it lands. */}
         <span className="sr-only" aria-live="polite" aria-atomic="true">
           {phrases[index]}

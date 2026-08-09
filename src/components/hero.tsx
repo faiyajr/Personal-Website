@@ -38,7 +38,10 @@ export function Hero() {
       <div className="container-page relative pb-16 pt-14 md:pb-24 md:pt-20">
         <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-16">
           {/* ── Left: name, typing line, intro ── */}
-          <div className="lg:col-span-7">
+          {/* min-w-0: a grid item refuses to shrink below its min-content size
+              by default, which lets a long headline push the column wider than
+              the page instead of wrapping inside it. */}
+          <div className="min-w-0 lg:col-span-7">
             <motion.p {...fadeUp(0)} className="eyebrow mb-7 flex items-center gap-2">
               <span className="relative flex size-1.5">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent opacity-60" />
@@ -49,7 +52,10 @@ export function Hero() {
 
             <motion.h1
               {...fadeUp(0.08)}
-              className="font-display text-display-lg text-foreground"
+              // `break-words` is a backstop: at the smallest widths the longest
+              // headline phrase has no slack, and a word breaking mid-way is a
+              // better failure than one running off the side of the screen.
+              className="font-display text-display-lg text-foreground [overflow-wrap:break-word]"
             >
               I&apos;m <span className="text-accent">{site.firstName}</span>,
               <br />
