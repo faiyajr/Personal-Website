@@ -56,14 +56,21 @@ export function BlurCycle({
   return (
     <span className={cn("grid", className)}>
       {/* Every phrase, invisible and stacked, so the cell is always as tall as
-          the tallest one and the line below never jumps between phrases. */}
+          the tallest one and the line below never jumps between phrases.
+
+          These have to use the same word boxes as the animated copy below, not
+          plain text. Flex-wrapped words need more width per line than inline
+          text does — each word's `pr` counts toward the line and does not
+          collapse at a break — so measuring plain text under-reserved the
+          height, and on narrow screens the longest phrase wrapped to one more
+          line than the cell had room for and spilled onto the paragraph. */}
       {phrases.map((phrase) => (
-        <span
-          key={phrase}
-          aria-hidden
-          className="invisible [grid-area:1/1]"
-        >
-          {phrase}
+        <span key={phrase} aria-hidden className="invisible flex flex-wrap [grid-area:1/1]">
+          {phrase.split(" ").map((word, i) => (
+            <span key={`${word}-${i}`} className="inline-block pr-[0.26em]">
+              {word}
+            </span>
+          ))}
         </span>
       ))}
 
@@ -77,7 +84,10 @@ export function BlurCycle({
           <motion.span
             key={index}
             aria-hidden
-            className="inline-flex flex-wrap"
+            // Block-level `flex`, matching the measurement spans above. As an
+            // `inline-flex` this was shrink-to-fit and could wrap at a
+            // different width than what was measured.
+            className="flex flex-wrap"
             initial="hidden"
             animate="show"
             exit="out"
