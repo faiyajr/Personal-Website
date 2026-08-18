@@ -129,7 +129,7 @@ export const experience: Experience[] = [
     location: "Ann Arbor, MI",
     points: [
       "Built a C++ Raspberry Pi dashboard decoding 1000+ CAN messages/sec into signals and fault states across 3 pages.",
-      "Refactored the legacy Python GUI codebase into C++, cutting latency ~100× and improving signal timing ~50%.",
+      "Wrote firmware for an IR lap trigger, edge-detecting photosensor voltage drops on beam break to timestamp laps.",
       "Partnered with the testing subteam to debug and validate software on-vehicle, ensuring ~100% data consistency.",
     ],
     tech: ["Cursor", "C/C++", "Embedded Systems", "Linux", "CAN", "Raspberry Pi", "GitLab"],
