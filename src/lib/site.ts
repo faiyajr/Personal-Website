@@ -54,7 +54,7 @@ export const site = {
     { type: "std::string", name: "school", value: "University of Michigan" },
     { type: "std::string", name: "major", value: "Computer Engineering" },
     { type: "std::string", name: "graduation", value: "May 2028" },
-    { type: "std::string", name: "role", value: "SWE Intern @ Bosch" },
+    { type: "std::string", name: "role", value: "prev: SWE Intern @ Bosch" },
     { type: "std::string", name: "location", value: "Ann Arbor, MI" },
     { type: "std::string", name: "email", value: "faiyajr@umich.edu" },
     {
@@ -67,7 +67,7 @@ export const site = {
   // ── About page bio ──────────────────────────────────────────────────────
   bio: [
     "I'm a Computer Engineering student at the University of Michigan with a deep interest in low-level software, high-performance systems, ML architectures, and embedded platforms. I enjoy digging into complex systems, squeezing out maximum performance, and building things from the bare metal up.",
-    "Right now I'm a Software Engineering Intern at Bosch working on agentic AI and cloud platforms, and Software Developer at Saf. On the side my focus is split across three builds: a sub-millisecond, cache-efficient C++ limit order book and matching engine; Overround, a transformer backed by a multithreaded Monte Carlo engine that predicts UEFA Champions League matches; and Kestrel, a custom autonomous drone tying low-level control systems to real-time flight logic.",
+    "I just wrapped up a Software Engineering internship at Bosch, where I worked on agentic AI and cloud platforms, and I'm a Software Developer at Saf. On the side my focus is split across three builds: a sub-millisecond, cache-efficient C++ limit order book and matching engine; Overround, a transformer backed by a multithreaded Monte Carlo engine that predicts UEFA Champions League matches; and Kestrel, a custom autonomous drone tying low-level control systems to real-time flight logic.",
     "When I'm not debugging software or optimizing architectures, you'll usually find me lifting heavy metal circles, playing football (no, it's not soccer), or running through lobbies in games 🤪.",
     "Whether it's low-latency C++, embedded firmware, or ML infrastructure, I'm always up for connecting on hard engineering problems. Reach me at faiyajr@umich.edu.",
   ],
