@@ -22,7 +22,7 @@ Anything you don't know yet, leave blank or write `?`. Partial is fine; I'll wor
 > Hey! I'm Faiyaj! I like dabbling in the activities of building, programming, playing soccer, going to the gym, and the occasional late-night gaming session. Hope you enjoy your stay in my website. 
 
 **Bio** — two or three paragraphs for the About page. What you work on, what you're looking for:
-> Hey everyone, I'm Faiyaj! I'm a Computer Engineering student at the University of Michigan with a deep passion for low-level software, high-performance systems, ML architectures, and embedded platforms. I enjoy digging into complex systems, squeezing out maximum performance, and building cool things from the bare metal up.  Currently, I'm a Software Engineering Intern at Bosch, working on agentic AI and cloud platforms, as well as the Co-Founder and Software Engineer for Saf. On the side, my main project focus is split across three builds: engineering a sub-millisecond, cache-efficient C++ Limit Order Book & Matching Engine; developing Overround, a transformer model backed by a multithreaded Monte Carlo simulation engine to predict UEFA Champions League matches; and building Kestrel, my custom autonomous drone integrating low-level control systems with real-time flight logic.  When I’m not debugging software or optimizing architectures, you’ll usually find me lifting heavy metal circles, playing football (no, it’s not soccer), or running through lobbies in games 🤪.  Whether it's low-latency C++, embedded firmware, or machine learning infrastructure, I’m always eager to connect and collaborate on challenging engineering problems. Feel free to reach out at faiyajr@umich.edu!  
+> Hey everyone, I'm Faiyaj! I'm a Computer Engineering student at the University of Michigan with a deep passion for low-level software, high-performance systems, ML architectures, and embedded platforms. I enjoy digging into complex systems, squeezing out maximum performance, and building cool things from the bare metal up.  Currently, I'm a Software Engineering Intern at Bosch, working on agentic AI and cloud platforms, as well as the Co-Founder and Software Engineer for Saf. On the side, my main project focus is split between two builds: engineering a sub-millisecond, cache-efficient C++ Limit Order Book & Matching Engine, and developing Overround, a transformer model backed by a multithreaded Monte Carlo simulation engine to predict UEFA Champions League matches.  When I’m not debugging software or optimizing architectures, you’ll usually find me lifting heavy metal circles, playing football (no, it’s not soccer), or running through lobbies in games 🤪.  Whether it's low-latency C++, embedded firmware, or machine learning infrastructure, I’m always eager to connect and collaborate on challenging engineering problems. Feel free to reach out at faiyajr@umich.edu!  
 
 ---
 
@@ -52,18 +52,6 @@ Screenshots: assets-inbox/<foldername>/      (see section 4) the image is a conc
 What it does, in your own words — a few sentences is plenty. Rough is fine,
 I'll write the final copy: limit order bookk and matching engine simulation in cpp
 
-### Kestrel
-Repo:        (https://github.com/faiyajr/Kestrel)          (or: private / none)
-Live URL:    none for now
-Year:        July - present                            (or a range: 2024-2025)
-Role:       solo enfgineer                      (or "Backend lead, team of 4")
-Status:      In progress
-Screenshots: assets-inbox/<foldername>/      (see section 4) concept images
-What it does, in your own words — a few sentences is plenty. Rough is fine,
-I'll write the final copy: Ongoing development of an autonomous drone — designing the PCB, using an open-source flight controller (ArduPilot, PX4, or Betaflight) for bring-up. MCU: STM32. Custom algorithms for object detection and flight movements/functions.
-
-A custom autonomous quadcopter — own airframe, own flight controller PCB, own firmware, own object detection. Built from scratch on STM32.
-
 ### Overround
 Repo:        (https://github.com/faiyajr/Overround)          (or: private / none)
 Live URL:    none for now
@@ -72,9 +60,7 @@ Role:       solo enfgineer                      (or "Backend lead, team of 4")
 Status:      In progress
 Screenshots: assets-inbox/<foldername>/      (see section 4) concept image as well
 What it does, in your own words — a few sentences is plenty. Rough is fine,
-I'll write the final copy: Ongoing development of an autonomous drone — designing the PCB, using an open-source flight controller (ArduPilot, PX4, or Betaflight) for bring-up. MCU: STM32. Custom algorithms for object detection and flight movements/functions.
-
-A custom autonomous quadcopter — own airframe, own flight controller PCB, own firmware, own object detection. Built from scratch on STM32.
+I'll write the final copy: A transformer with learned club embeddings over 18,000+ matches, paired with a multithreaded C++ Monte Carlo engine, predicting UEFA Champions League outcomes.
 
 
 ## Done:
