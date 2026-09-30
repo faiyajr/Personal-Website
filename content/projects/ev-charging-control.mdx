@@ -1,0 +1,46 @@
+---
+title: EV Charging Control Module
+summary: Safety logic and tooling for an EV charging module — a Simulink state machine, a Python port to test it, and a PySide6 control GUI.
+description: >-
+  The charger's safety logic was designed as a finite state machine in
+  Simulink, ported to Python so every input combination could be tested, and
+  paired with a desktop GUI for entering parameters and running the module.
+year: 2026
+role: Solo
+status: live
+visibility: private
+tech:
+  - Python
+  - Simulink
+  - PySide6
+  - Finite State Machines
+cover:
+  src: /images/projects/ev-charging-control/cover-illustrated.png
+  alt: State diagram of the normal, standard shutdown and emergency states with their transitions
+highlights:
+  - Three-state safety FSM with prioritised emergency and standard shutdown
+  - Python port driven by a truth table of input scenarios
+  - Qt GUI with parameter validation, run timer, logging and file upload
+---
+
+## The problem
+
+A charging module has to fail safe. When conditions go wrong, the charger must
+drop power, and it must always prefer the more cautious response when more than
+one fault is present.
+
+## Approach
+
+**State machine in Simulink.** The safety logic has three states: normal
+operation, standard shutdown, and emergency operation. Emergency conditions
+take priority over standard ones, a standard shutdown can escalate to an
+emergency, and only an all-clear returns the charger to normal.
+
+**Ported to Python to test it.** The same machine was rebuilt in Python and run
+against a truth table of input scenarios. That gave fast, readable checks of
+every transition outside Simulink, and made the logic easy to drop into a
+Python pipeline.
+
+**A GUI for the bench.** A PySide6 desktop app groups the module's parameters,
+validates them before a run, tracks status, errors and runtime, and saves both
+parameters and logs to file.

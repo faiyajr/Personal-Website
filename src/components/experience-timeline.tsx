@@ -62,35 +62,30 @@ export function ExperienceTimeline({
                 "hover:border-border-strong",
               )}
             >
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <h3 className="font-display text-2xl leading-tight text-foreground">
-                  {job.role}
-                </h3>
-                {current && <Badge variant="accent">Current</Badge>}
+              {/* Mirrors the PDF: organisation and location on top, role in
+                  italics underneath. */}
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <h3 className="font-display text-2xl leading-tight text-foreground">
+                    {job.url ? (
+                      <a
+                        href={job.url}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="underline decoration-accent decoration-[1.5px] underline-offset-4"
+                      >
+                        {job.company}
+                      </a>
+                    ) : (
+                      job.company
+                    )}
+                  </h3>
+                  {current && <Badge variant="accent">Current</Badge>}
+                </div>
+                {job.location && <p className="text-sm text-subtle">{job.location}</p>}
               </div>
 
-              <p className="mt-1.5 text-[0.9375rem] text-muted">
-                {job.url ? (
-                  <a
-                    href={job.url}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="text-foreground underline decoration-accent decoration-[1.5px] underline-offset-4"
-                  >
-                    {job.company}
-                  </a>
-                ) : (
-                  <span className="text-foreground">{job.company}</span>
-                )}
-                {job.location && (
-                  <>
-                    <span aria-hidden className="mx-2 text-subtle">
-                      ·
-                    </span>
-                    <span className="text-subtle">{job.location}</span>
-                  </>
-                )}
-              </p>
+              <p className="mt-1.5 text-[0.9375rem] italic text-muted">{job.role}</p>
 
               {!compact && job.points.length > 0 && (
                 <ul className="mt-4 space-y-2">

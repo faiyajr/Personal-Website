@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowUpRight, Globe } from "lucide-react";
+import { ArrowUpRight, Globe, Lock } from "lucide-react";
 
 import { GithubIcon } from "@/components/icons";
 import { useMotionScale } from "@/components/motion/use-motion-scale";
@@ -142,6 +142,7 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
                     {project.status === "in-progress" ? "In progress" : "Archived"}
                   </Badge>
                 )}
+                {project.visibility === "private" && <Badge variant="outline">Private</Badge>}
               </div>
 
               <h3 className="font-display text-display-sm text-foreground">{project.title}</h3>
@@ -177,7 +178,13 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
                   View project
                   <ArrowUpRight className="size-4" />
                 </Link>
-                {project.repo && (
+                {project.visibility === "private" && (
+                  <Link href="/contact" className={cn(buttonVariants({ variant: "outline" }))}>
+                    <Lock className="size-4" />
+                    Request access
+                  </Link>
+                )}
+                {project.visibility === "public" && project.repo && (
                   <a
                     href={project.repo}
                     target="_blank"
@@ -188,7 +195,7 @@ export function ProjectShowcase({ projects }: { projects: Project[] }) {
                     Repo
                   </a>
                 )}
-                {project.demo && (
+                {project.visibility === "public" && project.demo && (
                   <a
                     href={project.demo}
                     target="_blank"

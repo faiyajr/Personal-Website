@@ -1,0 +1,45 @@
+---
+title: Euchre
+summary: A full game of Euchre in C++, with rule-following computer players and a human player behind a common interface.
+description: >-
+  A command-line implementation of the card game Euchre: card and pack
+  modelling, trump and bower rules, and a game loop that runs hands to a target
+  score. Computer and human players plug into the same abstract interface.
+year: 2026
+role: Team of 2
+status: live
+visibility: private
+tech:
+  - C++
+  - OOP
+  - Polymorphism
+  - Unit Testing
+cover:
+  src: /images/projects/euchre/cover-illustrated.png
+  alt: A fanned hand of cards with the right and left bowers highlighted and hearts as trump
+highlights:
+  - Abstract Player interface with Simple (AI) and Human implementations
+  - Trump, left and right bower, and led-suit rules encoded in card ordering
+  - Unit tests covering cards, packs and player strategy
+---
+
+## The problem
+
+Euchre's rules make card comparison context-dependent. Which card wins depends
+on trump, on which suit was led, and on the bowers: the jack of the trump
+suit's partner colour becomes the second-highest trump. Getting that right
+everywhere is most of the work.
+
+## Approach
+
+**Rules in the card layer.** Comparison helpers take trump and the led card
+into account, so higher-level code asks "does this card win?" rather than
+re-deriving the rules.
+
+**One interface, two kinds of player.** A `Player` base class defines making
+trump, discarding, leading and following. `SimplePlayer` implements a fixed
+strategy; `HumanPlayer` prompts on the command line. A factory builds either
+from the command-line arguments, so the game loop never knows which it has.
+
+**Tested layer by layer.** Cards, packs and player strategy each have their
+own test suite, so the rules are checked before the game loop relies on them.

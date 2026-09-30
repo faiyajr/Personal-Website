@@ -1,0 +1,46 @@
+---
+title: Seam-Carving Image Resizer
+summary: Content-aware image resizing in C++ that removes the lowest-energy seams, so the important parts of a picture survive the shrink.
+description: >-
+  An image resizer that shrinks width and height without squashing the subject.
+  It computes an energy map, finds the cheapest connected seam through it with
+  dynamic programming, and removes seams one at a time until the image hits its
+  target size.
+year: 2026
+role: Team of 2
+status: live
+visibility: private
+tech:
+  - C++
+  - Dynamic Programming
+  - Image Processing
+  - Unit Testing
+cover:
+  src: /images/projects/seam-carving/cover-illustrated.png
+  alt: Pixel energy map with a low-energy vertical seam drawn between two bright regions
+highlights:
+  - Energy map from squared pixel differences
+  - Dynamic-programming cost matrix to find the minimal seam
+  - Height resizing by rotating, carving width, and rotating back
+---
+
+## The problem
+
+Scaling an image down evenly shrinks everything, including the subject.
+Cropping throws away whole regions. Seam carving removes the pixels nobody
+would miss: paths through the image where little is happening.
+
+## Approach
+
+**Energy.** Each pixel's energy is the squared colour difference between its
+neighbours. Edges and detail score high, and flat sky scores low.
+
+**Cheapest seam by dynamic programming.** A cost matrix accumulates, row by
+row, the minimum energy of any connected vertical path reaching each pixel.
+Walking back up from the cheapest bottom cell recovers the seam to remove.
+
+**Height for free.** Rather than writing a second algorithm for horizontal
+seams, the image is rotated 90°, carved in width, and rotated back.
+
+The `Matrix` and `Image` abstractions underneath were written from scratch,
+with unit tests for each layer. Built with Raghav Ganti.

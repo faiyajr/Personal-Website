@@ -1,0 +1,44 @@
+---
+title: Radiation Heatmap & Tumor Detection
+summary: MATLAB image processing that denoises sensor data, paints it onto terrain as a radiation heatmap, and flags tumors in brain scans.
+description: >-
+  One image-processing pipeline, two uses. Noisy radiation readings are
+  smoothed with a mean filter and mapped onto terrain imagery as colour, and
+  the same filtering flags bright regions in brain scans as possible tumors.
+year: 2025
+role: Solo
+status: live
+visibility: private
+tech:
+  - MATLAB
+  - Image Processing
+  - HSV Colour
+  - Unit Testing
+cover:
+  src: /images/projects/radiation-heatmap/cover-illustrated.png
+  alt: Noisy radiation readings on the left smoothed into coloured threat zones on the right
+highlights:
+  - Three-pass n×n mean filter for noise removal
+  - Smooth heatmap and discrete threat zones via the HSV hue channel
+  - Threshold-based tumor flagging on filtered scans
+---
+
+## The problem
+
+Raw sensor readings are noisy, and a grid of numbers means little to the
+person reading it. The job is to clean the data, then show it in a way people
+can take in at a glance.
+
+## Approach
+
+**Denoise.** An n×n mean filter is applied three times with replicated edges,
+which smooths out spikes without shrinking the image.
+
+**Heatmap and zones.** The image is converted to HSV and the hue channel is set
+from the radiation value: a smooth gradient for the heatmap, and fixed hue
+bands for discrete threat zones. Saturation is maxed so the colour reads over
+the terrain.
+
+**Tumor detection.** The same filter is run over a brain scan, and any region
+still brighter than a tuned threshold is flagged for follow-up. The threshold
+was chosen by testing values against sample scans.

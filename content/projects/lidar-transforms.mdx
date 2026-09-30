@@ -1,0 +1,46 @@
+---
+title: LIDAR Point Cloud Transforms
+summary: Affine transformations in Julia that correct distorted 2D and 3D LIDAR point clouds from the Cassie Blue bipedal robot.
+description: >-
+  Linear algebra applied to robot mapping. Translation, rotation and scaling
+  are built as homogeneous-coordinate matrices, composed, and applied to whole
+  point clouds at once to undo distortion in real LIDAR data.
+year: 2026
+role: Solo
+status: live
+visibility: private
+tech:
+  - Julia
+  - Linear Algebra
+  - Robotics
+  - Jupyter
+cover:
+  src: /images/projects/lidar-transforms/cover-illustrated.png
+  alt: A skewed LIDAR point cloud transformed into an aligned one with coordinate axes
+highlights:
+  - Homogeneous coordinates so every transform is one matrix multiply
+  - Composed affine transforms applied to entire point clouds
+  - 3D scans from Cassie Blue stitched into one world-frame map
+---
+
+## The problem
+
+A LIDAR scan is thousands of points, and a robot's view of them is only useful
+if they're in the right frame. Correcting a scan means moving, rotating and
+rescaling every point at once.
+
+## Approach
+
+**Homogeneous coordinates.** Appending a 1 to each point lets translation be
+written as a matrix, like rotation and scaling already are. Every
+transformation becomes a single multiply.
+
+**Compose, then apply.** Transformations are chained by multiplying their
+matrices, then applied to a whole point cloud stored as the columns of one
+matrix. No loops over points are needed.
+
+**Real data.** The same approach first corrects a distorted 2D point cloud.
+It then handles 3D scans from Cassie Blue, a bipedal robot at the University of
+Michigan. Each scan is captured in the LIDAR's own frame, which moves as the
+robot walks, so it is transformed into a fixed world frame using the robot's
+pose. The corrected scans line up into one consistent map of North Campus.

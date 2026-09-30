@@ -1,0 +1,47 @@
+---
+title: Fake Review Detector
+summary: A keyword-weighted text classifier in C++ that scores reviews and sorts them into truthful, deceptive, or uncategorised.
+description: >-
+  A small natural-language-processing program. It cleans raw review text,
+  scores each review against a list of weighted keywords, and uses score
+  thresholds to flag reviews as likely truthful or likely deceptive, writing
+  the results to a report.
+year: 2025
+role: Solo
+status: live
+visibility: private
+tech:
+  - C++
+  - NLP
+  - File I/O
+  - Unit Testing
+cover:
+  src: /images/projects/fake-review-detector/cover-illustrated.png
+  alt: Three reviews with weighted keywords highlighted, each scored and labelled truthful, deceptive or unsure
+highlights:
+  - Preprocessing that strips punctuation and normalises case
+  - Weighted keyword scoring per review
+  - Threshold classification into truthful, deceptive or uncategorised
+---
+
+## The problem
+
+Fake reviews tend to lean on different words from genuine ones. Given a list of
+keywords weighted by how strongly they signal honesty or deception, read a set
+of reviews and sort them.
+
+## Approach
+
+**Clean the text first.** Each review is split into words, then stripped of
+non-alphanumeric characters and lower-cased, so "Great!" and "great" count as
+the same keyword.
+
+**Score by weights.** Every word is looked up in the keyword list, and a
+review's score is the sum of its words' weights. Words not in the list count as
+zero.
+
+**Classify and report.** Scores above one threshold are marked truthful, and
+scores below another are marked deceptive. Everything in between stays
+uncategorised. The program writes each review's score and category to a
+report, then summary counts and the highest- and lowest-scoring reviews. Unit
+tests cover the scoring and preprocessing functions.

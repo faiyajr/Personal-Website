@@ -1,0 +1,50 @@
+---
+title: Treasure Hunt
+summary: A C++ grid-search simulator where a captain and first mate hunt for treasure, switchable between stack and queue search at runtime.
+description: >-
+  A two-phase search over an N×N map of water and land. The captain sails the
+  water; each time the boat reaches land, the first mate searches the island.
+  Either search can run depth-first or breadth-first, chosen by command-line
+  flag, and the winning path is reconstructed by backtracking.
+year: 2026
+role: Solo
+status: live
+visibility: private
+tech:
+  - C++
+  - STL
+  - Graph Search
+  - Make
+cover:
+  src: /images/projects/treasure-hunt/cover-illustrated.png
+  alt: Grid map of water and land tiles with a dotted search path ending at a treasure marker
+highlights:
+  - Two nested searches sharing one discovery grid
+  - Stack or queue per searcher, chosen at runtime with getopt_long
+  - Path reconstruction by backtracking stored directions
+---
+
+## The problem
+
+Find the treasure on a map of water, land and impassable terrain, and report
+how you got there. The map arrives either as a full grid or as a sparse list of
+coordinates, and the program has to handle both.
+
+## Approach
+
+**One container type, two behaviours.** Both the captain's and the first
+mate's searches run off a `std::deque`. Popping from the back makes it a stack
+(depth-first); popping from the front makes it a queue (breadth-first). The
+choice is a command-line flag, so the same code covers all four combinations.
+
+**Memory-conscious tiles.** Each tile stores only its terrain and the direction
+it was reached from. An unset direction doubles as "not yet discovered", so no
+separate visited grid is needed.
+
+**Backtracking instead of storing paths.** Rather than carrying a path with
+every search state, the program follows the stored directions backwards from
+the treasure once it is found, then prints the route as a map overlay or a
+coordinate list.
+
+Output modes include verbose logging, search statistics, and the path in
+either format.

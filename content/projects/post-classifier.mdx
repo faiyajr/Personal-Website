@@ -1,0 +1,46 @@
+---
+title: Naive Bayes Post Classifier
+summary: A from-scratch Naive Bayes text classifier in C++ that learns to label forum posts by topic from their words.
+description: >-
+  A bag-of-words Naive Bayes classifier. It trains on labelled posts from a
+  CSV, builds word and label counts with STL maps and sets, then predicts the
+  most likely label for new posts using log-probabilities.
+year: 2026
+role: Solo
+status: live
+visibility: private
+tech:
+  - C++
+  - Machine Learning
+  - Naive Bayes
+  - STL
+cover:
+  src: /images/projects/post-classifier/cover-illustrated.png
+  alt: Words connected to three topic labels, each with a probability bar
+highlights:
+  - Training and prediction on CSV input
+  - Log-probabilities to avoid floating-point underflow
+  - Fallback probabilities for words never seen in training
+---
+
+## The problem
+
+Given a few thousand labelled posts, predict the topic of a new one, without
+any ML library.
+
+## Approach
+
+**Bag of words.** Each post is reduced to its set of unique words. Training
+counts how many posts carry each label, how many contain each word, and how
+often each word appears under each label, stored in nested `std::map`s.
+
+**Log-probabilities.** Multiplying many small probabilities underflows a
+`double` quickly, so every score is a sum of logs instead.
+
+**Unseen words.** A word that never appeared with a label, or never appeared at
+all, gets a fallback probability based on the overall training counts rather
+than zeroing out the whole prediction.
+
+Given a test file, the program prints each prediction and its
+log-probability score beside the correct label, then how many posts it got
+right.

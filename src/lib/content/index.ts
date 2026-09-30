@@ -25,7 +25,11 @@ export type { Project, Image, Metric, CardSize } from "./schema";
 let cache: Project[] | null = null;
 
 function all(): Project[] {
-  // Cached per server process; content is read once at build time.
+  // In dev, re-read on every request: MDX files aren't imported modules, so
+  // editing one never triggers a reload, and a process-wide cache would serve
+  // stale content until `next dev` restarts.
+  if (process.env.NODE_ENV !== "production") return loadProjects();
+  // In production, cached per server process; content is read once at build.
   cache ??= loadProjects();
   return cache;
 }

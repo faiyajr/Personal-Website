@@ -90,6 +90,25 @@ function Glyph({ symbol, side, at, tone, dur, delay, onPhone }: (typeof GLYPHS)[
   );
 }
 
+/** Minimize / maximize / close: 46px wide like the real Windows 11 buttons. */
+const CAPTION_BUTTON =
+  "grid w-[46px] place-items-center text-muted transition-colors duration-150 hover:bg-foreground/[0.06] hover:text-foreground";
+
+/** The small document glyph Windows puts before a file's name in the title bar. */
+function FileIcon() {
+  return (
+    <svg viewBox="0 0 12 14" className="h-3.5 w-3 text-accent">
+      <path
+        d="M1.5 0.5h6l3 3v9a1 1 0 0 1-1 1h-8a1 1 0 0 1-1-1v-11a1 1 0 0 1 1-1z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1"
+      />
+      <path d="M7.5 0.5v3h3" fill="none" stroke="currentColor" strokeWidth="1" />
+    </svg>
+  );
+}
+
 export function StructCard({ className }: { className?: string }) {
   return (
     // The wrapper is the positioning context for the glyphs and must not clip,
@@ -105,12 +124,28 @@ export function StructCard({ className }: { className?: string }) {
       </div>
 
       <div className="overflow-hidden rounded-card border border-border bg-surface/70 shadow-card backdrop-blur-sm">
-        {/* Window chrome */}
-        <div className="flex items-center gap-2 border-b border-border bg-surface px-4 py-3">
-          <span className="size-2.5 rounded-full bg-[#ff5f57]" />
-          <span className="size-2.5 rounded-full bg-[#febc2e]" />
-          <span className="size-2.5 rounded-full bg-[#28c840]" />
-          <span className="ml-2 font-mono text-xs text-subtle">faiyaj.hpp</span>
+        {/* Window chrome, Windows 11 style: title on the left, flat caption
+            buttons on the right that fill the bar's height. Decorative only. */}
+        <div aria-hidden className="flex h-9 items-stretch border-b border-border bg-surface">
+          <div className="flex flex-1 items-center gap-2 pl-3">
+            <FileIcon />
+            <span className="font-mono text-xs text-subtle">faiyaj.hpp</span>
+          </div>
+          <span className={CAPTION_BUTTON}>
+            <svg viewBox="0 0 10 10" className="size-2.5">
+              <path d="M0 5h10" stroke="currentColor" strokeWidth="1" />
+            </svg>
+          </span>
+          <span className={CAPTION_BUTTON}>
+            <svg viewBox="0 0 10 10" className="size-2.5">
+              <rect x="0.5" y="0.5" width="9" height="9" rx="1.5" fill="none" stroke="currentColor" strokeWidth="1" />
+            </svg>
+          </span>
+          <span className={cn(CAPTION_BUTTON, "hover:bg-[#c42b1c] hover:text-white")}>
+            <svg viewBox="0 0 10 10" className="size-2.5">
+              <path d="M0.5 0.5l9 9M9.5 0.5l-9 9" stroke="currentColor" strokeWidth="1" />
+            </svg>
+          </span>
         </div>
 
         {/* The snippet is decorative for screen readers — the same facts are on

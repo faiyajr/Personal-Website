@@ -1,0 +1,53 @@
+---
+title: Stock Market Simulator & Priority Queues
+summary: A C++ stock exchange that matches buy and sell orders with priority queues, built on a hand-written library of five priority queue implementations.
+description: >-
+  Two halves that meet in the middle. A market simulator streams timestamped
+  buy and sell orders from many traders and matches them at the best available
+  price. Underneath it sits a priority queue library written from scratch,
+  ranging from an unordered array to a binary heap and a pairing heap.
+year: 2026
+role: Solo
+status: in-progress
+visibility: private
+tech:
+  - C++
+  - Priority Queues
+  - Heaps
+  - Templates
+cover:
+  src: /images/projects/stocks-and-pq/cover-illustrated.png
+  alt: Candlestick price chart beside a max-heap with the best bid at the root
+highlights:
+  - Order matching by best price, oldest order first on ties
+  - Running median match price per stock
+  - Binary heap and pairing heap alongside sorted and unordered queues
+---
+
+## The problem
+
+An exchange receives orders out of the blue: trader 2 wants to sell 42 shares
+of stock 0 at $56, trader 1 wants to buy 19 at $73. Each new order has to be
+matched instantly against the best waiting order on the other side, so
+"best waiting order" has to be cheap to find, over and over.
+
+## The plan
+
+**Matching.** Each stock keeps a queue of buy orders (highest price first) and
+a queue of sell orders (lowest price first). When the best buy meets or beats
+the best sell, a trade happens at the waiting order's price. Partial fills
+leave the remainder in the queue.
+
+**Reporting.** Optional modes print every trade as it happens, a running median
+match price for each stock, an end-of-day summary per trader, and a
+"time traveler" report: the best buy-then-sell a trader could have made with
+perfect hindsight.
+
+**The queues themselves.** The same interface is implemented five ways: an
+unordered array, a faster unordered variant, a sorted array, a binary heap, and
+a pairing heap. They're templated on element type and comparator, so the
+simulator can swap between them and the trade-offs show up in real timings.
+
+## Where it stands
+
+In progress.

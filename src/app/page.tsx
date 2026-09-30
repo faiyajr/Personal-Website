@@ -20,8 +20,11 @@ export default function HomePage() {
   const all = getAllProjects();
   const featured = getFeaturedProjects();
   // Anything not in the showcase falls through to the bento grid, so every
-  // project appears exactly once on this page.
-  const rest = all.filter((p) => !featured.some((f) => f.slug === p.slug));
+  // public project appears exactly once on this page. Private work (mostly
+  // coursework) lives on /projects only, so it doesn't bury the real builds.
+  const rest = all.filter(
+    (p) => p.visibility === "public" && !featured.some((f) => f.slug === p.slug),
+  );
   const tech = getAllTech().slice(0, 16);
 
   return (
@@ -44,8 +47,13 @@ export default function HomePage() {
           <SectionHeading eyebrow="More work" title="Also worth a look." />
           <BentoGrid>
             {rest.map((project, i) => (
-              <BentoItem key={project.slug} size={project.size} index={i}>
-                <ProjectCard project={project} />
+              // Uniform cards, matching /projects: two across, three on desktop.
+              <BentoItem
+                key={project.slug}
+                index={i}
+                className="md:col-span-3 lg:col-span-2"
+              >
+                <ProjectCard project={project} size="md" />
               </BentoItem>
             ))}
           </BentoGrid>

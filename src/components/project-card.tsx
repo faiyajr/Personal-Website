@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Globe } from "lucide-react";
+import { ArrowUpRight, Globe, Lock } from "lucide-react";
 
 import { GithubIcon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
@@ -49,6 +49,13 @@ export function ProjectCard({
           />
         ) : (
           <PlaceholderCover title={project.title} />
+        )}
+
+        {project.visibility === "private" && (
+          <Badge variant="outline" className="absolute left-3 top-3 gap-1 bg-background/80 backdrop-blur">
+            <Lock className="size-3" strokeWidth={2} />
+            Private
+          </Badge>
         )}
 
         {project.status !== "live" && (
@@ -101,15 +108,16 @@ export function ProjectCard({
           {/* Sits above the card-wide link below so these stay separately
               clickable rather than being swallowed by the overlay. */}
           <div className="relative z-20 flex items-center gap-1">
-            {project.repo && (
-              <IconLink href={project.repo} label={`${project.title} source code`}>
-                <GithubIcon className="size-4" />
-              </IconLink>
-            )}
-            {project.demo && (
-              <IconLink href={project.demo} label={`${project.title} live site`}>
-                <Globe className="size-4" strokeWidth={1.75} />
-              </IconLink>
+            {project.visibility === "private" ? (
+              <Link
+                href="/contact"
+                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium text-muted transition-colors hover:bg-surface hover:text-foreground"
+              >
+                <Lock className="size-3.5" strokeWidth={1.75} />
+                Request access
+              </Link>
+            ) : (
+              <PublicLinks project={project} />
             )}
           </div>
         </div>
@@ -121,6 +129,23 @@ export function ProjectCard({
         <span className="sr-only">{project.title}</span>
       </Link>
     </article>
+  );
+}
+
+function PublicLinks({ project }: { project: Project }) {
+  return (
+    <>
+      {project.repo && (
+        <IconLink href={project.repo} label={`${project.title} source code`}>
+          <GithubIcon className="size-4" />
+        </IconLink>
+      )}
+      {project.demo && (
+        <IconLink href={project.demo} label={`${project.title} live site`}>
+          <Globe className="size-4" strokeWidth={1.75} />
+        </IconLink>
+      )}
+    </>
   );
 }
 

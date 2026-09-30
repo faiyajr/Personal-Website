@@ -1,0 +1,42 @@
+---
+title: Planet Routes
+summary: A C++ route planner that places planets on a grid and plots a mission through them with the nearest-neighbour heuristic.
+description: >-
+  Reads a mission grid, planet locations and planet names from file, draws the
+  map, then plans a route from start to finish by always travelling to the
+  closest planet not yet visited.
+year: 2025
+role: Solo
+status: live
+visibility: private
+tech:
+  - C++
+  - Algorithms
+  - File I/O
+cover:
+  src: /images/projects/planet-routes/cover-illustrated.png
+  alt: Planets joined by a dashed nearest-neighbour route from start to end
+highlights:
+  - Nearest-neighbour routing by Euclidean distance
+  - Grid rendering of the mission map
+  - Structs for planets and missions, parsed from input files
+---
+
+## The problem
+
+Visit every planet on the map, starting and ending at fixed points, with a
+route that is short without being exhaustively optimal.
+
+## Approach
+
+**Parse, then plan.** Mission bounds, planet coordinates and planet names come
+from separate input files and are loaded into `Planet` and `Mission` structs.
+Out-of-bounds planets are filtered before planning starts.
+
+**Nearest neighbour.** From the current position, the planner picks the
+closest unvisited planet by Euclidean distance, moves there, marks it visited,
+and repeats. It's a greedy heuristic rather than an optimal tour, but it's fast
+and good enough in practice.
+
+**Readable output.** The program prints the map as a character grid, then the
+journey step by step, from "Start at" to "End at".

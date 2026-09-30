@@ -51,6 +51,11 @@ export const projectFrontmatterSchema = z.object({
   /** e.g. "Solo build", "Backend lead (team of 4)" */
   role: z.string().optional(),
   status: z.enum(["live", "archived", "in-progress"]).default("live"),
+  /**
+   * `private` means the code and demo are not public: the site hides repo/demo
+   * links and asks visitors to get in touch for access instead.
+   */
+  visibility: z.enum(["public", "private"]).default("public"),
 
   /** Featured projects appear on the home page bento grid. */
   featured: z.boolean().default(false),

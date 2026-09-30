@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, Globe } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Globe, Lock } from "lucide-react";
 
 import { GithubIcon } from "@/components/icons";
 import { MdxContent } from "@/components/mdx-content";
@@ -75,6 +75,7 @@ export default async function ProjectPage({ params }: PageProps) {
                 {project.status === "in-progress" ? "In progress" : "Archived"}
               </Badge>
             )}
+            {project.visibility === "private" && <Badge variant="outline">Private</Badge>}
           </div>
 
           <BlurReveal
@@ -91,7 +92,14 @@ export default async function ProjectPage({ params }: PageProps) {
 
           <Reveal delay={0.28}>
             <div className="mt-8 flex flex-wrap gap-3">
-              {project.demo && (
+              {project.visibility === "private" && (
+                <Link href="/contact" className={cn(buttonVariants({ variant: "accent" }))}>
+                  <Lock className="size-4" />
+                  Request a demo or repo access
+                  <ArrowUpRight className="size-4" />
+                </Link>
+              )}
+              {project.visibility === "public" && project.demo && (
                 <a
                   href={project.demo}
                   target="_blank"
@@ -103,7 +111,7 @@ export default async function ProjectPage({ params }: PageProps) {
                   <ArrowUpRight className="size-4" />
                 </a>
               )}
-              {project.repo && (
+              {project.visibility === "public" && project.repo && (
                 <a
                   href={project.repo}
                   target="_blank"
@@ -177,7 +185,7 @@ export default async function ProjectPage({ params }: PageProps) {
               </div>
             )}
 
-            {project.demo && (
+            {project.visibility === "public" && project.demo && (
               <div className="py-5">
                 <dt className="eyebrow mb-2">Live at</dt>
                 <dd>

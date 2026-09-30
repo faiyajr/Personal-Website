@@ -1,0 +1,45 @@
+---
+title: LC-2K Assembler
+summary: A two-pass assembler in C that turns LC-2K assembly into machine code, with label resolution and error checking.
+description: >-
+  An assembler for LC-2K, a compact 8-instruction ISA. It resolves labels in a
+  first pass, encodes each
+  instruction into a 32-bit word in the second, and rejects malformed programs
+  with specific errors.
+year: 2026
+role: Solo
+status: live
+visibility: private
+tech:
+  - C
+  - Assembly
+  - Computer Architecture
+  - Make
+cover:
+  src: /images/projects/lc2k-assembler/cover-illustrated.png
+  alt: LC-2K assembly source beside the 32-bit machine code it assembles to
+highlights:
+  - Two-pass design with a label table
+  - Bit-level encoding of R-, I- and O-type instructions
+  - Validation for bad labels, duplicates, unknown opcodes and offset overflow
+---
+
+## The problem
+
+Assembly is written with labels and mnemonics; the machine only understands
+32-bit words. An assembler has to bridge that exactly, and fail loudly on
+anything ambiguous.
+
+## Approach
+
+**Pass one: labels.** The first pass reads every line and records each label's
+address, so a branch can refer to a label defined further down the file.
+
+**Pass two: encoding.** Each instruction is packed into a 32-bit word: opcode,
+register fields, and a 16-bit signed offset for I-type instructions, with
+`.fill` directives resolved to numbers or label addresses.
+
+**Errors as a feature.** Labels are checked for length, first character and
+duplicates. Opcodes, register numbers and offsets that don't fit in 16 bits
+are all rejected. Each case has its own test program, from `duplicate.as` to
+`undef_label.as`.

@@ -88,16 +88,16 @@ export const experience: Experience[] = [
     end: "Aug 2026",
     location: "Farmington Hills, MI",
     points: [
-      "Deployed an operations platform to AWS and scripted multi-tenant KPIs and analytics scaling to 5000+ vehicles.",
-      "Designed a tool to convert CAN .asc logs to MF4 with DBC channel mapping, saving 20+ engineer-hours monthly.",
-      "Shipped a 3-agent pipeline, cleaning and tagging internal docs for a master agent, cutting new-hire escalations 40%.",
-      "Configured a robust REST API data pipeline, boosting data extraction speeds for project management analytics by 5x.",
+      "Deployed a Flask operations platform to AWS and scripted multi-tenant KPIs and analytics scaling to 5000+ devices.",
+      "Designed a Python tool to convert CAN .asc logs to MF4 with DBC channel mapping, saving 20+ engineer-hours monthly.",
+      "Shipped a 3-agent pipeline, cleaning and tagging internal documents for a master agent, cutting new-hire escalations 40%.",
       "Engineered a multi-threaded GUI tool used by 100+ developers to build Python executables, saving $15K in licenses.",
-      "Scoped multiple user stories in 2-week sprints with code reviews, demoing 4 tools org-wide to non-technical customers.",
     ],
     tech: [
       "Agentic AI",
       "Python",
+      "Flask",
+      "PySide6",
       "AWS",
       "REST APIs",
       "CI/CD",
@@ -107,6 +107,38 @@ export const experience: Experience[] = [
       "Git",
     ],
   },
+  // The stealth role, Hikmah Hackers and Roblox tie on dates; the sort is
+  // stable, so this array order decides which shows first.
+  {
+    company: "Stealth",
+    role: "Building something new",
+    start: "Sep 2026",
+    end: "Present",
+    points: ["Working on something I can't talk about yet. More soon."],
+    tech: ["██████", "████", "████████"],
+  },
+  {
+    company: "Hikmah Hackers",
+    role: "Co-Founder & Lead Instructor",
+    start: "Sep 2026",
+    end: "Present",
+    location: "Warren, MI",
+    points: [
+      "Co-founded a coding and mentorship program for underserved middle and high school students at an Islamic STEM school, teaching programming fundamentals through problem sets & hands-on mini-projects, and giving students career guidance.",
+      "Designing a curriculum spanning CS topics, game/web dev, and AI scripting, featuring hackathons offering cash prizes.",
+    ],
+    tech: ["Teaching", "Curriculum Design", "Mentorship", "Python", "Game Dev", "Web Dev"],
+  },
+  {
+    company: "Roblox",
+    role: "Independent Game Developer",
+    start: "Sep 2026",
+    end: "Present",
+    points: [
+      "Independently designing, scripting, and publishing Roblox games in Luau, from gameplay systems to live updates.",
+    ],
+    tech: ["Lua", "Luau", "Roblox Studio", "Game Design"],
+  },
   {
     company: "Saf · Darul Uloom Michigan",
     role: "Software Developer",
@@ -114,10 +146,9 @@ export const experience: Experience[] = [
     end: "Present",
     location: "Warren, MI",
     points: [
-      "Launched a school-management beta on Postgres, an Express REST API, and React with role-based access control.",
-      "Implemented assignment making, grading, attendance, and an admin panel, replacing paper grades for 20+ educators.",
-      "Ran the school's live pilot for 3 months in 2-week sprints, shipping 5 iterations from educator review with feedback.",
-      "Currently contributing to the production platform and implementing AI feature work ahead of scholar-backed launch.",
+      "Launched a school-management beta on Postgres, an Express REST API, and React featuring role-based access control.",
+      "Implemented assignments, grading, and attendance, replacing paper grades for 20+ educators in a 3-month live pilot.",
+      "Driving AI integration on a 3-engineer team, scoping LLM report card narratives & role-scoped natural language querying.",
     ],
     tech: ["Claude", "TypeScript", "React", "Supabase", "PostgreSQL", "Tailwind CSS", "Git"],
   },
@@ -128,9 +159,8 @@ export const experience: Experience[] = [
     end: "Present",
     location: "Ann Arbor, MI",
     points: [
-      "Built a C++ Raspberry Pi dashboard decoding 1000+ CAN messages/sec into signals and fault states across 3 pages.",
-      "Wrote firmware for an IR lap trigger, edge-detecting photosensor voltage drops on beam break to timestamp laps.",
-      "Partnered with the testing subteam to debug and validate software on-vehicle, ensuring ~100% data consistency.",
+      "Built a C++ Raspberry Pi dashboard decoding 1000+ CAN messages/sec into driver analytics & fault states over 3 pages.",
+      "Wrote firmware for an infrared lap trigger, edge-detecting photosensor voltage drops on beam breaks to timestamp laps.",
     ],
     tech: ["Cursor", "C/C++", "Embedded Systems", "Linux", "CAN", "Raspberry Pi", "GitLab"],
   },
@@ -147,12 +177,11 @@ export const experience: Experience[] = [
     tech: ["Claude", "Python", "Raspberry Pi", "Simulink", "Figma"],
   },
   {
-    // NOT in resume.tex — add the real dates and bullets, then mirror them
-    // back into the LaTeX so the PDF and the site agree.
+    // Not on the PDF resume — site only.
     company: "University of Michigan ITS",
     role: "Tech Consultant",
     start: "Aug 2025",
-    end: "Present",
+    end: "Sep 2026",
     location: "Ann Arbor, MI",
     points: [
       "Administered new computers, devices, and ID access credentials for campus customers and students.",
@@ -171,7 +200,8 @@ export const education: Education[] = [
     end: "May 2028",
     location: "Ann Arbor, MI",
     details: [
-      "Relevant coursework: Data Structures and Algorithms, Computer Organization, Object Oriented Programming, Discrete Math, Computing Systems, Computational Linear Algebra, Vector Calculus",
+      "GPA: 3.6/4.0 · Dean's List",
+      "Coursework: Data Structures & Algorithms, Computer Architecture, Object Oriented Programming, Discrete Math, Computing Systems, Linear Algebra, Multivariable & Vector Calculus",
     ],
   },
 ];
@@ -195,6 +225,9 @@ export const skills: SkillGroup[] = [
       "JavaScript",
       "TypeScript",
       "SQL",
+      "Lua",
+      "Julia",
+      "Bash",
       "Assembly",
       "Verilog",
       "MATLAB",
@@ -205,18 +238,26 @@ export const skills: SkillGroup[] = [
   {
     label: "Tools & Frameworks",
     items: [
-      "Claude",
+      "Claude Code",
       "Cursor",
       "Codex",
       "React",
-      "Node",
+      "Node/Express",
       "FastAPI",
+      "Flask",
+      "PySide6",
+      "Tailwind",
+      "PyTorch",
+      "GoogleTest",
       "PostgreSQL",
       "Supabase",
       "AWS",
       "Docker",
+      "Kubernetes",
       "Linux",
-      "PyTorch",
+      "GitLab",
+      "Simulink",
+      "Roblox Studio",
     ],
   },
   {
