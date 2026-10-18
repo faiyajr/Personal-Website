@@ -124,7 +124,7 @@ export const experience: Experience[] = [
     end: "Present",
     location: "Warren, MI",
     points: [
-      "Co-founded a coding and mentorship program for underserved middle and high school students at an Islamic STEM school, teaching programming fundamentals through problem sets & hands-on mini-projects, and giving students career guidance.",
+      "Co-founded a coding and mentorship program for underserved middle and high school students at a STEM school, teaching programming fundamentals through problem sets & hands-on mini-projects, and giving students tailored career guidance.",
       "Designing a curriculum spanning CS topics, game/web dev, and AI scripting, featuring hackathons offering cash prizes.",
     ],
     tech: ["Teaching", "Curriculum Design", "Mentorship", "Python", "Game Dev", "Web Dev"],
@@ -135,7 +135,7 @@ export const experience: Experience[] = [
     start: "Sep 2026",
     end: "Present",
     points: [
-      "Independently designing, scripting, and publishing Roblox games in Luau, from gameplay systems to live updates.",
+      "Building a Roblox game. More soon.",
     ],
     tech: ["Lua", "Luau", "Roblox Studio", "Game Design"],
   },
@@ -160,7 +160,8 @@ export const experience: Experience[] = [
     location: "Ann Arbor, MI",
     points: [
       "Built a C++ Raspberry Pi dashboard decoding 1000+ CAN messages/sec into driver analytics & fault states over 3 pages.",
-      "Wrote firmware for an infrared lap trigger, edge-detecting photosensor voltage drops on beam breaks to timestamp laps.",
+      "Collaborated with engineers to integrate vehicle telemetry, CAN diagnostics, and fault checking into the racing dashboard.",
+      "Wrote C firmware for an infrared lap trigger, edge-detecting photosensor voltage drops on beam breaks to timestamp laps.",
     ],
     tech: ["Cursor", "C/C++", "Embedded Systems", "Linux", "CAN", "Raspberry Pi", "GitLab"],
   },
@@ -171,8 +172,9 @@ export const experience: Experience[] = [
     end: "May 2026",
     location: "Ann Arbor, MI",
     points: [
-      "Developed open-source Python software for an EV charging module, contributing to $10K in net savings for an OEM.",
-      "Designed a Simulink FSM for system-safety logic and charging protocols, porting it to Python for pipeline integration.",
+      "Developed open-source Python UI software for an EV charging module, contributing to $10K in net savings for an OEM.",
+      "Designed a Simulink finite-state machine for system-safety logic and charging protocols, translating models into Python.",
+      "Integrated state logic into the software pipeline, coordinating state transitions, charging sequences, and safety conditions.",
     ],
     tech: ["Claude", "Python", "Raspberry Pi", "Simulink", "Figma"],
   },

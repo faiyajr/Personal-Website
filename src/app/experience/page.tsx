@@ -64,7 +64,7 @@ export default function ExperiencePage() {
                 <div className="mb-3 flex items-center gap-2">
                   <GraduationCap className="size-4 text-accent" strokeWidth={1.75} />
                   <p className="font-mono text-xs uppercase tracking-widest text-subtle">
-                    {entry.start} — {entry.end}
+                    Expected graduation · {entry.end}
                   </p>
                 </div>
                 <p className="font-display text-2xl text-foreground">{entry.school}</p>

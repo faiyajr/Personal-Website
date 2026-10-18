@@ -87,7 +87,7 @@
 \section{Education}
   \resumeSubHeadingListStart
     \resumeSubheading
-      {University of Michigan}{Ann Arbor, MI}
+      {University of Michigan -- Ann Arbor}{Ann Arbor, MI}
       {B.S.E. in Computer Engineering $|$ GPA: 3.6/4.0 $\cdot$ Dean's List}{Expected Graduation: May 2028}
       \resumeItemListStart
         \resumeItem{\textbf{Coursework:} Data Structures \& Algorithms, Computer Architecture, Object Oriented Programming, Discrete Math, Computing Systems, Linear Algebra, Multivariable \& Vector Calculus}
@@ -118,7 +118,7 @@
       {Hikmah Hackers}{Warren, MI}
       {Co-Founder \& Lead Instructor}{Sep. 2026 -- Present}
       \resumeItemListStart
-        \resumeItem{Co-founded a coding and mentorship program for underserved middle and high school students at an Islamic STEM school, teaching programming fundamentals through problem sets \& hands-on mini-projects, and giving students career guidance.}
+        \resumeItem{Co-founded a coding and mentorship program for underserved middle and high school students at a STEM school, teaching programming fundamentals through problem sets \& hands-on mini-projects, and giving students tailored career guidance.}
         \resumeItem{Designing a curriculum spanning CS topics, game/web dev, and AI scripting, featuring hackathons offering cash prizes.}
       \resumeItemListEnd
     \resumeSubheading
@@ -135,15 +135,17 @@
       {Software Engineer}{Aug. 2025 -- Present}
       \resumeItemListStart
         \resumeItem{Built a C++ Raspberry Pi dashboard decoding \textbf{1000+} CAN messages/sec into driver analytics \& fault states over \textbf{3} pages.}
-        \resumeItem{Wrote firmware for an infrared lap trigger, edge-detecting photosensor voltage drops on beam breaks to timestamp laps.}
+        \resumeItem{Collaborated with engineers to integrate vehicle telemetry, CAN diagnostics, and fault checking into the racing dashboard.}
+        \resumeItem{Wrote C firmware for an infrared lap trigger, edge-detecting photosensor voltage drops on beam breaks to timestamp laps.}
       \resumeItemListEnd
 
     \resumeSubheading
       {University of Michigan Electric Vehicle Center}{Ann Arbor, MI}
       {Undergraduate Research Software Developer}{Sep. 2025 -- May 2026}
       \resumeItemListStart
-        \resumeItem{Developed open-source Python software for an EV charging module, contributing to \textbf{\$10k} in net savings for an OEM.}
-        \resumeItem{Designed a Simulink FSM for system-safety logic and charging protocols, porting it to Python for pipeline integration.}
+        \resumeItem{Developed open-source Python UI software for an EV charging module, contributing to \textbf{\$10K} in net savings for an OEM.}
+        \resumeItem{Designed a Simulink finite-state machine for system-safety logic and charging protocols, translating models into Python.}
+        \resumeItem{Integrated state logic into the software pipeline, coordinating state transitions, charging sequences, and safety conditions.}
       \resumeItemListEnd
   \resumeSubHeadingListEnd
 
@@ -151,25 +153,20 @@
 \section{Projects}
     \resumeSubHeadingListStart
 
-    \resumeProjectHeading
-        {\textbf{Overround} $|$ \emph{C++, Python, PyTorch, React, D3.js, FastAPI, PostgreSQL}}{Jul. 2026 -- Present}
-        \resumeItemListStart
-            \resumeItem{Building a transformer with learned club embeddings over \textbf{18,000+} matches to predict UEFA Champions League outcomes, benchmarking against Dixon-Coles and Elo.}
-            \resumeItem{Engineering a multithreaded C++ Monte Carlo engine simulating the \textbf{36}-team league phase at \textbf{5,000+} sims per sec.}
-        \resumeItemListEnd
-
       \resumeProjectHeading
-          {\textbf{Limit Order Book \& Matching Engine} $|$ \emph{C++, Linux, Git, gTest}}{May 2026 -- Present}
+          {\textbf{Stock Market Simulator \& PQ Libraries} $|$ \emph{C++, Linux, Templated design, Git}}{May. 2026 -- Oct. 2026}
           \resumeItemListStart
-            \resumeItem{Building a C++ limit order book with price--time priority at \textbf{10K--100K+} orders/sec and \textbf{sub-millisecond} latency.}
-            \resumeItem{Optimizing with cache-efficient data structures and custom allocators, cutting latency $\sim$\textbf{60\%} over \textbf{1M+} order events.}
+            \resumeItem{Developed a C++ exchange simulator matching orders with \textbf{price--time priority}, partial fills, and multi-stock execution.}
+            \resumeItem{Implemented \textbf{3} priority queues (binary, sorting and pairing heaps) to test insertion, removal, and matching performance.}
+            \resumeItem{Built \textbf{4} reporting modes for live trades, running-median prices, trader PnL, and optimal historical buy/sell opportunities.}
           \resumeItemListEnd
 
         \resumeProjectHeading
           {\textbf{Low-Level Modulator} $|$ \emph{Verilog, Assembly, FPGA, Digital Logic}}{Jan. 2026 -- Apr. 2026}
           \resumeItemListStart
-            \resumeItem{Engineered an \textbf{18}-instruction processor in Verilog on a DE2-115 FPGA driving a synthesizer with \textbf{40} assembly modules.}
-            \resumeItem{Designed an integer-math DSP pipeline synthesizing \textbf{32-bit} audio from \textbf{3} wavetables with \textbf{5} modulations at \textbf{30 FPS}.}
+            \resumeItem{Engineered an \textbf{18}-instruction processor in Verilog on a DE2-115 FPGA, driving a synthesizer with \textbf{40} assembly modules.}
+            \resumeItem{Designed an integer-math DSP pipeline synthesizing \textbf{32-bit} audio from \textbf{3} wavetables with \textbf{5} modulation modes at \textbf{30 FPS}.}
+            \resumeItem{Wrote instructions (arithmetic operations and control logic) for processor execution with FPGA-based audio generation.}
           \resumeItemListEnd
 
     \resumeSubHeadingListEnd
@@ -179,8 +176,9 @@
  \begin{itemize}[leftmargin=0.15in, label={}]
     \small{\item{
      \textbf{Languages}{: Python, C, C++, JavaScript, TypeScript, SQL, Lua, Julia, Bash, Assembly, Verilog, MATLAB} \\
-     \textbf{Tools/Frameworks}{: Claude Code/Cursor Skills, React, Node/Express, PyTorch, Tailwind, PySide6, Flask, GoogleTest, PostgreSQL, Supabase, AWS, Docker, Kubernetes, Linux, GitLab, CAN, Raspberry Pi, Simulink} \\
-     \textbf{Practices}{: Agile/Scrum, Git/GitHub, CI/CD, code review, unit testing, RAG \& LLM agents}
+     \textbf{Tools/Frameworks}{: Claude Code/Cursor Skills, React, Node/Express, Tailwind, PySide6, Flask, GoogleTest, PostgreSQL, Supabase, AWS, Docker, Kubernetes, Linux, GitLab, CAN, Raspberry Pi, Simulink} \\
+     \textbf{Practices}{: Agile/Scrum, Git/GitHub, CI/CD, code review, unit testing, LLM agents} \\
+     \textbf{Interests}{: Traveling, Gaming, Soccer, Weightlifting, Cooking, Studying Islam, Watching Movies}
     }}
  \end{itemize}
 

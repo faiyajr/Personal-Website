@@ -359,39 +359,6 @@ function stocksPq() {
   return frame(s, "ORDER MATCHING · PRIORITY QUEUES", C.peach);
 }
 
-// ── 11. Limit order book: price ladder with FIFO queues at each level ──
-function limitOrderBook() {
-  let s = "";
-  const r = rng(11);
-  // Asks occupy rows 0–4, bids rows 5–9 shifted down by 40; the spread line
-  // sits in that 40px gap so it never crosses a price.
-  const mid = 150 + 5 * 58 + 20 - 4, rowH = 58, cx = 800;
-  const levels = [
-    ...[5, 4, 3, 2, 1].map((i) => ({ side: "ask", price: (100 + i * 0.05).toFixed(2), i })),
-    ...[1, 2, 3, 4, 5].map((i) => ({ side: "bid", price: (100 - i * 0.05 + 0.05).toFixed(2), i })),
-  ];
-  levels.forEach((lv, k) => {
-    const y = 150 + k * rowH + (lv.side === "bid" ? 40 : 0);
-    const col = lv.side === "ask" ? C.red : C.teal;
-    s += `<text x="${cx}" y="${y + 38}" text-anchor="middle" font-family="${MONO}" font-size="30" fill="${lv.i === 1 ? C.peach : C.mint}">${lv.price}</text>`;
-    // Queue of individual orders: oldest nearest the price (price-time priority).
-    const n = 2 + Math.floor(r() * 5);
-    let x = lv.side === "bid" ? cx - 110 : cx + 110;
-    for (let q = 0; q < n; q++) {
-      const w = 40 + Math.floor(r() * 70);
-      const bx = lv.side === "bid" ? x - w : x;
-      s += `<rect x="${bx}" y="${y + 8}" width="${w}" height="${rowH - 16}" rx="6" fill="${col}" opacity="${(0.9 - q * 0.13).toFixed(2)}"/>`;
-      x = lv.side === "bid" ? x - w - 8 : x + w + 8;
-    }
-  });
-  // Spread marker
-  s += `<line x1="${cx - 520}" y1="${mid + 4}" x2="${cx + 520}" y2="${mid + 4}" stroke="${C.muted}" stroke-width="2" stroke-dasharray="6 10"/>`;
-  s += `<text x="${cx + 540}" y="${mid + 12}" font-family="${MONO}" font-size="22" fill="${C.muted}" letter-spacing="2">SPREAD</text>`;
-  s += `<text x="${cx - 520}" y="120" font-family="${MONO}" font-size="24" fill="${C.teal}" letter-spacing="3">BIDS</text>`;
-  s += `<text x="${cx + 520}" y="120" text-anchor="end" font-family="${MONO}" font-size="24" fill="${C.red}" letter-spacing="3">ASKS</text>`;
-  return frame(s, "PRICE–TIME PRIORITY · SUB-MILLISECOND MATCHING", C.teal);
-}
-
 // ── 12. Darul Uloom grading: a gradebook with attendance ──
 function grading() {
   let s = "";
@@ -509,44 +476,6 @@ function modulator() {
   s += `<text x="1420" y="330" text-anchor="middle" font-family="${MONO}" font-size="56" fill="${C.mint}">×</text>`;
   s += `<text x="1420" y="560" text-anchor="middle" font-family="${MONO}" font-size="56" fill="${C.mint}">=</text>`;
   return frame(s, "18-INSTRUCTION CPU · 3 WAVETABLES · 5 MODULATIONS", C.peach);
-}
-
-// ── 15. Overround: Monte Carlo season paths fanning out into a histogram ──
-function overround() {
-  let s = "";
-  const r = rng(36);
-  const ox = 140, oy = 800, stepX = 120, scaleY = 26;
-  const finals = [];
-  for (let k = 0; k < 140; k++) {
-    let pts = 0, d = `M ${ox} ${oy}`;
-    // A per-path offset plus a little per-step jitter: points only come in
-    // 3/1/0, so without it every path snaps onto the same lattice.
-    const lane = (r() - 0.5) * 14;
-    for (let md = 1; md <= 8; md++) {
-      const u = r();
-      pts += u < 0.52 ? 3 : u < 0.75 ? 1 : 0;
-      const jitter = lane * (md / 8) + (r() - 0.5) * 6;
-      d += ` L ${ox + md * stepX} ${(oy - pts * scaleY + jitter).toFixed(1)}`;
-    }
-    finals.push(pts);
-    const hot = pts >= 16;
-    s += `<path d="${d}" fill="none" stroke="${hot ? C.peach : C.teal}" stroke-width="2" stroke-linejoin="round" opacity="${hot ? 0.4 : 0.16}"/>`;
-  }
-  // histogram of final points
-  const hx = ox + 8 * stepX + 60;
-  const counts = {};
-  finals.forEach((p) => (counts[p] = (counts[p] || 0) + 1));
-  Object.entries(counts).forEach(([p, c]) => {
-    const y = oy - Number(p) * scaleY;
-    s += `<rect x="${hx}" y="${y - 10}" width="${c * 17}" height="20" rx="5" fill="${Number(p) >= 16 ? C.peach : C.teal}" opacity="0.85"/>`;
-  });
-  // top-8 cut line
-  const cut = oy - 16 * scaleY;
-  s += `<line x1="${ox}" y1="${cut}" x2="${hx + 360}" y2="${cut}" stroke="${C.mint}" stroke-width="2" stroke-dasharray="8 10"/>`;
-  s += `<text x="${hx + 360}" y="${cut - 16}" text-anchor="end" font-family="${MONO}" font-size="22" fill="${C.mint}" letter-spacing="2">TOP 8</text>`;
-  for (let md = 1; md <= 8; md++)
-    s += `<text x="${ox + md * stepX}" y="${oy + 44}" text-anchor="middle" font-family="${MONO}" font-size="20" fill="${C.muted}">MD${md}</text>`;
-  return frame(s, "5,000+ SIMULATIONS / SEC · 36-TEAM LEAGUE PHASE", C.teal);
 }
 
 // ── 16. Racecar telemetry: driver dashboard with a CAN stream ──
@@ -675,12 +604,88 @@ function windFarm() {
   return frame(s, "FIVE SITE CONSTRAINTS · GLOBAL + BUOY DATA", C.teal);
 }
 
+// ── 20. Roblox game: an isometric baseplate with a few blocks, one still "?" ──
+function robloxGame() {
+  let s = "";
+  const ox = 800, oy = 300, tw = 64, th = 32;
+  const iso = (i, j, h = 0) => [ox + (i - j) * tw, oy + (i + j) * th - h];
+  // baseplate
+  const N = 8;
+  const [ax, ay] = iso(0, 0), [bx, by] = iso(N, 0), [cx2, cy2] = iso(N, N), [dx, dy] = iso(0, N);
+  s += `<path d="M ${ax} ${ay} L ${bx} ${by} L ${cx2} ${cy2} L ${dx} ${dy} z" fill="${C.bg}" stroke="${C.tealDim}" stroke-width="3"/>`;
+  s += `<path d="M ${dx} ${dy} L ${cx2} ${cy2} L ${cx2} ${cy2 + 26} L ${dx} ${dy + 26} z" fill="${C.tealDim}" opacity="0.6"/>`;
+  s += `<path d="M ${cx2} ${cy2} L ${bx} ${by} L ${bx} ${by + 26} L ${cx2} ${cy2 + 26} z" fill="${C.tealDim}" opacity="0.35"/>`;
+  for (let k = 1; k < N; k++) {
+    const [x1, y1] = iso(k, 0), [x2, y2] = iso(k, N), [x3, y3] = iso(0, k), [x4, y4] = iso(N, k);
+    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${C.grid}" stroke-width="2"/>`;
+    s += `<line x1="${x3}" y1="${y3}" x2="${x4}" y2="${y4}" stroke="${C.grid}" stroke-width="2"/>`;
+  }
+  // one unit cube at (i, j) stacked to level z, drawn back to front
+  const cube = (i, j, z, col, top = col) => {
+    const h = 64, base = z * h;
+    const [px, py] = iso(i, j, base), [qx, qy] = iso(i + 1, j, base), [rx, ry] = iso(i + 1, j + 1, base), [ux, uy] = iso(i, j + 1, base);
+    let c = `<path d="M ${ux} ${uy} L ${rx} ${ry} L ${rx} ${ry - h} L ${ux} ${uy - h} z" fill="${col}" opacity="0.9"/>`;
+    c += `<path d="M ${rx} ${ry} L ${qx} ${qy} L ${qx} ${qy - h} L ${rx} ${ry - h} z" fill="${col}" opacity="0.65"/>`;
+    c += `<path d="M ${px} ${py - h} L ${qx} ${qy - h} L ${rx} ${ry - h} L ${ux} ${uy - h} z" fill="${top}"/>`;
+    return c;
+  };
+  const blocks = [
+    [1, 1, 0, C.teal], [2, 1, 0, C.teal], [1, 2, 0, C.teal], [1, 1, 1, C.teal],
+    [5, 2, 0, C.copper], [5, 2, 1, C.copper], [5, 2, 2, C.copper],
+    [2, 5, 0, C.mint], [3, 5, 0, C.mint],
+    [5, 5, 0, C.peach, C.peach],
+  ];
+  blocks.sort((a, b) => a[0] + a[1] - (b[0] + b[1]) || a[2] - b[2]);
+  for (const [i, j, z, col, top] of blocks) s += cube(i, j, z, col, top);
+  // the unfinished block
+  const [qx, qy] = iso(5.5, 5.5, 64 + 44);
+  s += `<text x="${qx}" y="${qy}" text-anchor="middle" font-family="${SANS}" font-size="72" font-weight="700" fill="${C.peach}">?</text>`;
+  return frame(s, "IN THE WORKS · LUAU · ROBLOX STUDIO", C.peach);
+}
+
+// ── 21. AI software: a small agent graph and a mostly redacted chat ──
+function aiSoftware() {
+  let s = "";
+  const r = rng(21);
+  // node graph on the left
+  const nodes = [[330, 300], [520, 220], [520, 420], [700, 320], [330, 560], [560, 640], [720, 540]];
+  const edges = [[0, 1], [0, 2], [1, 3], [2, 3], [0, 4], [4, 5], [2, 5], [5, 6], [3, 6]];
+  for (const [a, b] of edges)
+    s += `<line x1="${nodes[a][0]}" y1="${nodes[a][1]}" x2="${nodes[b][0]}" y2="${nodes[b][1]}" stroke="${C.teal}" stroke-width="3" opacity="0.45"/>`;
+  nodes.forEach(([x, y], k) => {
+    const hub = k === 3;
+    s += `<circle cx="${x}" cy="${y}" r="${hub ? 44 : 26}" fill="${C.bg}" stroke="${hub ? C.peach : C.teal}" stroke-width="${hub ? 6 : 4}"/>`;
+    if (hub) s += `<circle cx="${x}" cy="${y}" r="14" fill="${C.peach}"/>`;
+  });
+  // chat panel on the right, contents redacted
+  const px = 900, py = 200, pw = 520;
+  s += `<rect x="${px}" y="${py}" width="${pw}" height="560" rx="28" fill="${C.bg}" stroke="${C.grid}" stroke-width="3"/>`;
+  let y = py + 56;
+  for (let k = 0; k < 4; k++) {
+    const mine = k % 2 === 0;
+    const lines = mine ? 1 : 2;
+    const bw = mine ? 220 + r() * 80 : 360 + r() * 60;
+    const bx = mine ? px + pw - 40 - bw : px + 40;
+    const bh = 30 + lines * 30;
+    s += `<rect x="${bx}" y="${y}" width="${bw}" height="${bh}" rx="18" fill="${mine ? C.tealDim : C.bg2}" stroke="${mine ? "none" : C.grid}" stroke-width="2"/>`;
+    for (let l = 0; l < lines; l++) {
+      const lw = (bw - 48) * (l === lines - 1 ? 0.55 + r() * 0.3 : 1);
+      s += `<rect x="${bx + 24}" y="${y + 22 + l * 30}" width="${lw}" height="14" rx="7" fill="${mine ? C.mint : C.muted}" opacity="${mine ? 0.7 : 0.5}"/>`;
+    }
+    y += bh + 22;
+  }
+  // blinking cursor
+  s += `<rect x="${px + 40}" y="${py + 500}" width="${pw - 80}" height="2" fill="${C.grid}"/>`;
+  s += `<rect x="${px + 44}" y="${py + 466}" width="14" height="26" fill="${C.peach}"/>`;
+  return frame(s, "IN THE WORKS · MORE SOON", C.teal);
+}
+
 const covers = {
-  "limit-order-book": limitOrderBook,
+  "roblox-game": robloxGame,
+  "ai-software": aiSoftware,
   "darul-uloom-grading": grading,
   "hall-effect-keyboard": keyboard,
   "low-level-modulator": modulator,
-  overround,
   "racecar-telemetry-dash": racecar,
   saf,
   "radiation-heatmap": radiationHeatmap,
