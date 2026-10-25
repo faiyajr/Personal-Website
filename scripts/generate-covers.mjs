@@ -680,6 +680,66 @@ function aiSoftware() {
   return frame(s, "IN THE WORKS · MORE SOON", C.teal);
 }
 
+// RBF surface: a mesh whose height is a sum of 2D Gaussians, drawn in isometric
+// projection over a map grid, with the basis centres marked beneath it.
+function alaskaPrecip() {
+  const CX = 790, CY = 500, SX = 560, SY = 230, SZ = 300;
+  const centers = [
+    [0.26, 0.3, 1.0],
+    [0.7, 0.22, 0.72],
+    [0.48, 0.68, 0.9],
+    [0.84, 0.74, 0.5],
+  ];
+  const sig = 0.17;
+  const height = (u, v) =>
+    centers.reduce((z, [cu, cv, a]) => z + a * Math.exp(-(((u - cu) ** 2 + (v - cv) ** 2) / (2 * sig * sig))), 0);
+  const proj = (u, v, z) => [CX + (u - v) * SX, CY + (u + v) * SY - z * SZ];
+
+  const N = 20;
+  let s = "";
+  // flat base grid, the domain the surface is fitted over
+  for (let i = 0; i <= N; i += 2) {
+    const t = i / N;
+    const [ax, ay] = proj(t, 0, 0), [bx, by] = proj(t, 1, 0);
+    const [cx2, cy2] = proj(0, t, 0), [dx, dy] = proj(1, t, 0);
+    s += `<path d="M ${ax.toFixed(1)} ${ay.toFixed(1)} L ${bx.toFixed(1)} ${by.toFixed(1)}" stroke="${C.tealDim}" stroke-width="1.5" opacity="0.5" fill="none"/>`;
+    s += `<path d="M ${cx2.toFixed(1)} ${cy2.toFixed(1)} L ${dx.toFixed(1)} ${dy.toFixed(1)}" stroke="${C.tealDim}" stroke-width="1.5" opacity="0.5" fill="none"/>`;
+  }
+  // basis centres on the base, each with a faint ring for its width
+  centers.forEach(([cu, cv]) => {
+    const [x, y] = proj(cu, cv, 0);
+    s += `<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="${(sig * SX * 1.6).toFixed(1)}" ry="${(sig * SY * 1.6).toFixed(1)}" fill="none" stroke="${C.copper}" stroke-width="2" opacity="0.55" stroke-dasharray="8 10"/>`;
+    s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="${C.copper}"/>`;
+  });
+  // the fitted surface, drawn as a wireframe in both directions
+  const line = (fixed, along) => {
+    let d = "";
+    for (let i = 0; i <= N; i++) {
+      const t = i / N;
+      const [u, v] = along === "v" ? [fixed, t] : [t, fixed];
+      const [x, y] = proj(u, v, height(u, v));
+      d += `${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)} `;
+    }
+    return d;
+  };
+  for (let i = 0; i <= N; i++) {
+    const t = i / N;
+    s += `<path d="${line(t, "v")}" fill="none" stroke="${C.teal}" stroke-width="2.2" opacity="0.72"/>`;
+    s += `<path d="${line(t, "u")}" fill="none" stroke="${C.mint}" stroke-width="2" opacity="0.4"/>`;
+  }
+  // measurement dots sitting on the surface
+  const r = rng(2026);
+  for (let k = 0; k < 46; k++) {
+    const u = r(), v = r();
+    const [x, y] = proj(u, v, height(u, v) + 0.035);
+    s += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6" fill="${C.peach}" opacity="0.9"/>`;
+  }
+  // the model, written out
+  s += `<text x="80" y="135" font-family="${MONO}" font-size="34" fill="${C.mint}">ŷ = a₀ + Σ aᵢ · exp( −‖x − xcᵢ‖² / 2s² )</text>`;
+  s += `<text x="80" y="185" font-family="${MONO}" font-size="26" fill="${C.muted}">Φα = Y   solved by LU + least squares</text>`;
+  return frame(s, "RADIAL BASIS FUNCTIONS · PRECIPITATION SURFACE FIT", C.teal);
+}
+
 const covers = {
   "roblox-game": robloxGame,
   "ai-software": aiSoftware,
@@ -697,6 +757,7 @@ const covers = {
   "fake-review-detector": fakeReviews,
   "lc2k-assembler": lc2k,
   "lidar-transforms": lidar,
+  "alaska-precipitation": alaskaPrecip,
   "planet-routes": planetRoutes,
   "post-classifier": postClassifier,
   "stocks-and-pq": stocksPq,
