@@ -604,45 +604,6 @@ function windFarm() {
   return frame(s, "FIVE SITE CONSTRAINTS · GLOBAL + BUOY DATA", C.teal);
 }
 
-// ── 20. Roblox game: an isometric baseplate with a few blocks, one still "?" ──
-function robloxGame() {
-  let s = "";
-  const ox = 800, oy = 300, tw = 64, th = 32;
-  const iso = (i, j, h = 0) => [ox + (i - j) * tw, oy + (i + j) * th - h];
-  // baseplate
-  const N = 8;
-  const [ax, ay] = iso(0, 0), [bx, by] = iso(N, 0), [cx2, cy2] = iso(N, N), [dx, dy] = iso(0, N);
-  s += `<path d="M ${ax} ${ay} L ${bx} ${by} L ${cx2} ${cy2} L ${dx} ${dy} z" fill="${C.bg}" stroke="${C.tealDim}" stroke-width="3"/>`;
-  s += `<path d="M ${dx} ${dy} L ${cx2} ${cy2} L ${cx2} ${cy2 + 26} L ${dx} ${dy + 26} z" fill="${C.tealDim}" opacity="0.6"/>`;
-  s += `<path d="M ${cx2} ${cy2} L ${bx} ${by} L ${bx} ${by + 26} L ${cx2} ${cy2 + 26} z" fill="${C.tealDim}" opacity="0.35"/>`;
-  for (let k = 1; k < N; k++) {
-    const [x1, y1] = iso(k, 0), [x2, y2] = iso(k, N), [x3, y3] = iso(0, k), [x4, y4] = iso(N, k);
-    s += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${C.grid}" stroke-width="2"/>`;
-    s += `<line x1="${x3}" y1="${y3}" x2="${x4}" y2="${y4}" stroke="${C.grid}" stroke-width="2"/>`;
-  }
-  // one unit cube at (i, j) stacked to level z, drawn back to front
-  const cube = (i, j, z, col, top = col) => {
-    const h = 64, base = z * h;
-    const [px, py] = iso(i, j, base), [qx, qy] = iso(i + 1, j, base), [rx, ry] = iso(i + 1, j + 1, base), [ux, uy] = iso(i, j + 1, base);
-    let c = `<path d="M ${ux} ${uy} L ${rx} ${ry} L ${rx} ${ry - h} L ${ux} ${uy - h} z" fill="${col}" opacity="0.9"/>`;
-    c += `<path d="M ${rx} ${ry} L ${qx} ${qy} L ${qx} ${qy - h} L ${rx} ${ry - h} z" fill="${col}" opacity="0.65"/>`;
-    c += `<path d="M ${px} ${py - h} L ${qx} ${qy - h} L ${rx} ${ry - h} L ${ux} ${uy - h} z" fill="${top}"/>`;
-    return c;
-  };
-  const blocks = [
-    [1, 1, 0, C.teal], [2, 1, 0, C.teal], [1, 2, 0, C.teal], [1, 1, 1, C.teal],
-    [5, 2, 0, C.copper], [5, 2, 1, C.copper], [5, 2, 2, C.copper],
-    [2, 5, 0, C.mint], [3, 5, 0, C.mint],
-    [5, 5, 0, C.peach, C.peach],
-  ];
-  blocks.sort((a, b) => a[0] + a[1] - (b[0] + b[1]) || a[2] - b[2]);
-  for (const [i, j, z, col, top] of blocks) s += cube(i, j, z, col, top);
-  // the unfinished block
-  const [qx, qy] = iso(5.5, 5.5, 64 + 44);
-  s += `<text x="${qx}" y="${qy}" text-anchor="middle" font-family="${SANS}" font-size="72" font-weight="700" fill="${C.peach}">?</text>`;
-  return frame(s, "IN THE WORKS · LUAU · ROBLOX STUDIO", C.peach);
-}
-
 // ── 21. AI software: a small agent graph and a mostly redacted chat ──
 function aiSoftware() {
   let s = "";
@@ -740,9 +701,149 @@ function alaskaPrecip() {
   return frame(s, "RADIAL BASIS FUNCTIONS · PRECIPITATION SURFACE FIT", C.teal);
 }
 
+// ── LC-2K linker: two object files merged into one executable ──
+function lc2kLinker() {
+  let s = "";
+  const objs = [
+    { name: "COUNT5_0.OBJ", y: 90, col: C.teal, text: 6, data: 1, sym: ["SubAdr U 0"], rel: ["0 lw five", "1 lw SubAdr"] },
+    { name: "COUNT5_1.OBJ", y: 500, col: C.mint, text: 3, data: 2, sym: ["SubAdr D 1"], rel: ["0 lw neg1", "1 .fill subOne"] },
+  ];
+  for (const o of objs) {
+    s += `<rect x="80" y="${o.y}" width="560" height="370" rx="20" fill="${C.bg}" stroke="${C.grid}" stroke-width="3"/>`;
+    s += `<text x="112" y="${o.y + 50}" font-family="${MONO}" font-size="22" fill="${C.muted}" letter-spacing="3">${o.name}</text>`;
+    // section bars: text, data
+    s += `<rect x="112" y="${o.y + 76}" width="${o.text * 64}" height="40" rx="6" fill="${o.col}" opacity="0.85"/>`;
+    s += `<text x="122" y="${o.y + 104}" font-family="${MONO}" font-size="20" fill="${C.bg}">TEXT</text>`;
+    s += `<rect x="112" y="${o.y + 128}" width="${o.data * 64}" height="40" rx="6" fill="${C.copper}" opacity="0.9"/>`;
+    s += `<text x="122" y="${o.y + 156}" font-family="${MONO}" font-size="20" fill="${C.bg}">DATA</text>`;
+    [...o.sym, ...o.rel].forEach((line, k) => {
+      const isSym = k < o.sym.length;
+      s += `<text x="112" y="${o.y + 218 + k * 42}" font-family="${MONO}" font-size="26" fill="${isSym ? C.peach : C.mint}">${line}</text>`;
+    });
+  }
+  // arrows into the executable
+  s += `<path d="M 660 275 C 760 275 760 420 850 420" stroke="${C.peach}" stroke-width="5" fill="none"/>`;
+  s += `<path d="M 660 685 C 760 685 760 520 850 520" stroke="${C.peach}" stroke-width="5" fill="none"/>`;
+  s += `<path d="M 842 405 L 868 420 L 842 435 z M 842 505 L 868 520 L 842 535 z" fill="${C.peach}"/>`;
+  // linked executable (spec example), coloured by source
+  const words = [
+    ["0x00810009", C.teal], ["0x0084000B", C.teal], ["0x01670000", C.teal], ["0x01010001", C.teal],
+    ["0x0100FFFD", C.teal], ["0x01800000", C.teal],
+    ["0x0082000A", C.mint], ["0x000A0001", C.mint], ["0x01780000", C.mint],
+    ["0x00000005", C.copper], ["0xFFFFFFFF", C.copper], ["0x00000006", C.copper],
+  ];
+  s += `<rect x="890" y="90" width="620" height="780" rx="20" fill="${C.bg}" stroke="${C.peach}" stroke-width="4"/>`;
+  s += `<text x="930" y="140" font-family="${MONO}" font-size="22" fill="${C.muted}" letter-spacing="3">COUNT5.MC</text>`;
+  words.forEach(([w, col], k) => {
+    const y = 196 + k * 52;
+    s += `<text x="930" y="${y}" font-family="${MONO}" font-size="22" fill="${C.muted}">${String(k).padStart(2, " ")}</text>`;
+    s += `<rect x="984" y="${y - 24}" width="8" height="32" rx="3" fill="${col}"/>`;
+    s += `<text x="1010" y="${y}" font-family="${MONO}" font-size="30" fill="${col}">${w}</text>`;
+  });
+  const sy = 196 + words.length * 52;
+  s += `<line x1="930" y1="${sy - 30}" x2="1470" y2="${sy - 30}" stroke="${C.muted}" stroke-width="2" stroke-dasharray="8 8"/>`;
+  s += `<text x="930" y="${sy + 8}" font-family="${MONO}" font-size="22" fill="${C.muted}">12</text>`;
+  s += `<text x="1010" y="${sy + 8}" font-family="${MONO}" font-size="30" fill="${C.peach}">Stack →</text>`;
+  return frame(s, "OBJECT FILES · RELOCATION · LINKING", C.peach);
+}
+
+// ── Log manager:a log pane with keyword hits pulled into an excerpt list ──
+function logManager() {
+  const r = rng(281);
+  let s = "";
+  const cats = ["TCP", "Clock", "UI-PANE1", "PGM", "TCP", "DISK", "TCP", "Clock", "AUTH", "TCP", "PGM", "DISK", "TCP"];
+  const msgs = ["Packet sent", "Tick", "Window received focus", "Beginning election", "Connection lost",
+    "Write ok", "Bad packet received", "Noon", "Login ok", "Connection lost", "Heartbeat", "Read ok", "Retrying connection"];
+  const hits = new Set([4, 9, 12]);
+  // left: the master log
+  s += `<rect x="64" y="70" width="880" height="790" rx="18" fill="${C.bg}" stroke="${C.tealDim}" stroke-width="3"/>`;
+  s += `<text x="100" y="125" font-family="${MONO}" font-size="28" fill="${C.peach}">% k tcp connection</text>`;
+  cats.forEach((cat, k) => {
+    const y = 185 + k * 50;
+    const mm = String(10 + k).padStart(2, "0"), ss = String(Math.floor(r() * 60)).padStart(2, "0");
+    const hit = hits.has(k);
+    if (hit) s += `<rect x="84" y="${y - 32}" width="840" height="44" rx="8" fill="${C.teal}" opacity="0.18"/>`;
+    s += `<text x="100" y="${y}" font-family="${MONO}" font-size="24" fill="${hit ? C.mint : C.muted}">11:07:03:${mm}:${ss}|${cat}|${msgs[k]}</text>`;
+  });
+  // arrow
+  s += `<path d="M 960 465 L 1040 465" stroke="${C.peach}" stroke-width="5"/>`;
+  s += `<path d="M 1040 448 L 1066 465 L 1040 482 z" fill="${C.peach}"/>`;
+  // right: the excerpt list
+  s += `<rect x="1080" y="250" width="460" height="430" rx="18" fill="${C.bg}" stroke="${C.peach}" stroke-width="4"/>`;
+  s += `<text x="1110" y="305" font-family="${MONO}" font-size="24" fill="${C.muted}" letter-spacing="2">EXCERPT LIST</text>`;
+  [...hits].forEach((k, i) => {
+    const y = 375 + i * 95;
+    s += `<rect x="1110" y="${y - 40}" width="400" height="66" rx="10" fill="${C.bg2}" stroke="${C.teal}" stroke-width="2"/>`;
+    s += `<text x="1132" y="${y + 3}" font-family="${MONO}" font-size="26" fill="${C.peach}">${i}</text>`;
+    s += `<text x="1170" y="${y + 3}" font-family="${MONO}" font-size="24" fill="${C.mint}">#${k} ${cats[k]}</text>`;
+  });
+  return frame(s, "INVERTED INDEX · BINARY SEARCH · EXCERPT LIST", C.peach);
+}
+
+// ── Pipeline simulator: a staggered pipe trace with a stall and forwarding ──
+function lc2kPipeline() {
+  let s = "";
+  const stages = ["IF", "ID", "EX", "MEM", "WB"];
+  const stageCol = { IF: C.tealDim, ID: C.teal, EX: C.peach, MEM: C.copper, WB: C.mint };
+  const x0 = 390, y0 = 200, cw = 130, rh = 120;
+  // rows: [label, startCycle, stalled?]
+  const rows = [
+    ["lw 0 1 five", 0, false],
+    ["add 1 1 2", 1, true],
+    ["nor 2 2 3", 2, false],
+    ["beq 0 3 done", 3, false],
+  ];
+  for (let c = 0; c < 9; c++) {
+    s += `<text x="${x0 + c * cw + cw / 2}" y="${y0 - 40}" text-anchor="middle" font-family="${MONO}" font-size="22" fill="${C.muted}">C${c}</text>`;
+  }
+  const cell = {};
+  rows.forEach(([label, start, stalled], r) => {
+    const y = y0 + r * rh;
+    s += `<text x="80" y="${y + 52}" font-family="${MONO}" font-size="30" fill="${C.mint}">${label}</text>`;
+    // instructions behind the stalled one also wait a cycle in IF
+    const seq = stalled ? ["IF", "ID*", "ID", "EX", "MEM", "WB"]
+      : r > 1 ? ["IF", "IF*", "ID", "EX", "MEM", "WB"] : stages;
+    let c = start;
+    for (const st of seq) {
+      const x = x0 + c * cw;
+      const held = st.endsWith("*");
+      const base = st.replace("*", "");
+      if (held && r > 1) {
+        // repeated stage, drawn faint
+        s += `<rect x="${x + 6}" y="${y}" width="${cw - 12}" height="78" rx="12" fill="${stageCol[base]}" opacity="0.3"/>`;
+        s += `<text x="${x + cw / 2}" y="${y + 50}" text-anchor="middle" font-family="${MONO}" font-size="28" fill="${C.bg}" font-weight="700">${base}</text>`;
+      } else if (held) {
+        s += `<rect x="${x + 6}" y="${y}" width="${cw - 12}" height="78" rx="12" fill="none" stroke="${C.muted}" stroke-width="3" stroke-dasharray="8 6"/>`;
+        s += `<text x="${x + cw / 2}" y="${y + 50}" text-anchor="middle" font-family="${MONO}" font-size="26" fill="${C.muted}">stall</text>`;
+      } else {
+        s += `<rect x="${x + 6}" y="${y}" width="${cw - 12}" height="78" rx="12" fill="${stageCol[base]}" opacity="0.9"/>`;
+        s += `<text x="${x + cw / 2}" y="${y + 50}" text-anchor="middle" font-family="${MONO}" font-size="28" fill="${C.bg}" font-weight="700">${base}</text>`;
+        cell[`${r}-${base}`] = [x + cw / 2, y];
+      }
+      c++;
+    }
+  });
+  // forwarding arrows into EX
+  const fwd = (a, b) => {
+    const [ax, ay] = cell[a], [bx, by] = cell[b];
+    s += `<path d="M ${ax} ${ay + 78} C ${ax} ${ay + 104} ${bx} ${by - 30} ${bx} ${by - 6}" stroke="${C.red}" stroke-width="5" fill="none"/>`;
+    s += `<path d="M ${bx - 12} ${by - 22} L ${bx} ${by - 4} L ${bx + 12} ${by - 22}" stroke="${C.red}" stroke-width="5" fill="none" stroke-linejoin="round"/>`;
+  };
+  fwd("0-WB", "1-EX");
+  fwd("1-EX", "2-EX");
+  // legend
+  s += `<line x1="80" y1="760" x2="130" y2="760" stroke="${C.red}" stroke-width="5"/>`;
+  s += `<text x="145" y="769" font-family="${MONO}" font-size="24" fill="${C.muted}">forwarded into EX</text>`;
+  s += `<rect x="520" y="742" width="50" height="36" rx="8" fill="none" stroke="${C.muted}" stroke-width="3" stroke-dasharray="8 6"/>`;
+  s += `<text x="585" y="769" font-family="${MONO}" font-size="24" fill="${C.muted}">load-use bubble</text>`;
+  return frame(s, "FIVE-STAGE PIPELINE · FORWARDING · STALLS", C.peach);
+}
+
 const covers = {
-  "roblox-game": robloxGame,
-  "ai-software": aiSoftware,
+  "log-manager": logManager,
+  "lc2k-linker": lc2kLinker,
+  "lc2k-pipeline": lc2kPipeline,
+  "ai-automation": aiSoftware,
   "darul-uloom-grading": grading,
   "hall-effect-keyboard": keyboard,
   "low-level-modulator": modulator,

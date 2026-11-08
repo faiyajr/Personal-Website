@@ -11,7 +11,7 @@ import { ProjectCard } from "@/components/project-card";
 import { ProjectShowcase } from "@/components/project-showcase";
 import { SectionHeading } from "@/components/section-heading";
 import { buttonVariants } from "@/components/ui/button";
-import { getAllProjects, getAllTech, getFeaturedProjects } from "@/lib/content";
+import { getAllProjects, getFeaturedProjects } from "@/lib/content";
 import { getExperience } from "@/lib/resume";
 import { site } from "@/lib/site";
 import { cn } from "@/lib/utils";
@@ -25,7 +25,7 @@ export default function HomePage() {
   const rest = all.filter(
     (p) => p.visibility === "public" && !featured.some((f) => f.slug === p.slug),
   );
-  const tech = getAllTech().slice(0, 16);
+  const tech = site.toolkit;
 
   return (
     <>

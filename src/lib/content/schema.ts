@@ -37,6 +37,35 @@ export const metricSchema = z.object({
   value: z.union([z.string(), z.number().transform(String)]),
 });
 
+/**
+ * The niche a project belongs to. The projects page groups completed work by
+ * these, in this order. Add an entry here to add a section.
+ */
+export const PROJECT_CATEGORIES = {
+  embedded: {
+    label: "Embedded & Hardware",
+    blurb: "PCBs, FPGAs, microcontrollers, and the code that runs on them.",
+  },
+  systems: {
+    label: "Systems & C/C++",
+    blurb: "Low-level programs where data structures, memory, and speed matter.",
+  },
+  fullstack: {
+    label: "Full-Stack Software",
+    blurb: "Products with real users, from database to interface.",
+  },
+  data: {
+    label: "ML & Data",
+    blurb: "Classifiers, regression, and numerical analysis on real data.",
+  },
+} as const;
+
+export type ProjectCategory = keyof typeof PROJECT_CATEGORIES;
+
+export const categorySchema = z.enum(
+  Object.keys(PROJECT_CATEGORIES) as [ProjectCategory, ...ProjectCategory[]],
+);
+
 /** Controls how much room the card takes in the bento grid on the home page. */
 export const cardSizeSchema = z.enum(["sm", "md", "lg", "wide", "tall"]);
 
@@ -51,6 +80,8 @@ export const projectFrontmatterSchema = z.object({
   /** e.g. "Solo build", "Backend lead (team of 4)" */
   role: z.string().optional(),
   status: z.enum(["live", "archived", "in-progress"]).default("live"),
+  /** Which section of the projects page this sits under. See PROJECT_CATEGORIES. */
+  category: categorySchema,
   /**
    * `private` means the code and demo are not public: the site hides repo/demo
    * links and asks visitors to get in touch for access instead.

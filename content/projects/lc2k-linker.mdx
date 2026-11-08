@@ -1,0 +1,95 @@
+---
+title: LC-2K Assembler & Linker
+summary: A C toolchain that assembles LC-2K source into relocatable object files and links up to six of them into one executable, plus a recursive assembly program that runs on it.
+description: >-
+  Real programs are split across files and call code they didn't write. This
+  toolchain makes that work for LC-2K: the assembler emits object files with
+  symbol and relocation tables instead of finished machine code, and the
+  linker stitches them together, resolves every cross-file reference, and
+  places the stack after everything else.
+year: 2026
+role: Solo
+status: live
+category: systems
+visibility: private
+tech:
+  - C
+  - Assembly
+  - Computer Architecture
+  - Linkers
+  - Make
+repo: https://github.com/faiyajr/assembler-linker-and-recursion
+cover:
+  src: /images/projects/lc2k-linker/cover-illustrated.png
+  alt: Three object files, each with text, data, symbol and relocation sections, merging into one machine code file with the Stack label at the end
+highlights:
+  - Object files with a header, text, data, symbol table and relocation table
+  - Local vs. global labels, with undefined globals left for the linker to resolve
+  - Links 1–6 object files, relocating every local and global reference
+  - Catches duplicate and undefined globals, and programs that define Stack
+  - A recursive combination function in assembly that keeps its state on the stack
+---
+
+## The problem
+
+My earlier [LC-2K assembler](/projects/lc2k-assembler) turned one file straight
+into machine code, which only works if everything a program needs lives in that
+file. As soon as one file calls a function defined in another, the assembler
+can't know where that function will end up. Something has to record what is
+missing, and something else has to fill it in once every file is known.
+
+## The plan
+
+**Assembler: write down what you don't know.** Instead of finished machine code,
+the assembler emits an object file in five parts:
+
+```
+6 1 1 2          header: text, data, symbol, relocation sizes
+0x00810006       text
+...
+0x00000005       data
+SubAdr U 0       symbol table
+0 lw five        relocation table
+1 lw SubAdr
+```
+
+Labels starting with a lowercase letter are local to their file; capitalised
+labels are global. A global used but not defined here is assembled as address
+`0` and listed as **U**ndefined in the symbol table. Every `lw`, `sw` or
+`.fill` that uses a label, local or global, gets a relocation entry, because
+its address will move once files are combined. `beq` is skipped, since it's
+PC-relative and can only target its own file.
+
+The assembler still rejects bad input: undefined local labels, a `beq` to an
+undefined label, duplicate labels, offsets that don't fit in 16 bits,
+unknown opcodes and invalid registers.
+
+**Linker: lay out, then patch.** The linker reads up to six object files and
+lays out the executable as every file's text in argument order, then every
+file's data. The first file passed is where execution starts. For each file
+it records where its text and data now begin, which is all it needs to fix
+references:
+
+- **Local labels** have no symbol table entry, so the linker reads the old
+  address back out of the instruction, works out whether it pointed into that
+  file's text or data, and shifts it by how far that section moved.
+- **Global labels** are looked up across every file's symbol table and replaced
+  with their final address.
+- **Stack** is reserved: it resolves to the first word past all text and data,
+  so the stack can grow upward without overwriting anything.
+
+Linking fails if a global is defined twice, is never defined, or if any file
+tries to define `Stack` itself.
+
+**Recursion in assembly.** To exercise the whole toolchain, I wrote a
+recursive `combination(n, r)` in LC-2K that calls itself twice per level.
+Each call pushes its return address and arguments onto the stack, so no
+register carries state between calls, and the result comes back in a single
+register. The output is assembled, linked and run on my LC-2K simulator.
+
+## What I tested
+
+Every assembler error has its own test program, and multi-file test groups
+check linking: locals with the same name in different files, globals used
+before they're defined, data that points into text, and each of the linker's
+error cases.

@@ -1,0 +1,84 @@
+---
+title: Log Manager
+summary: A C++ command-line tool that loads a large log file and answers timestamp, category and keyword searches instantly, with an editable excerpt list for the entries that matter.
+description: >-
+  Log files are huge, and almost every line in them is noise. logman reads a
+  master log once, builds the indexes it needs up front, and then drops into an
+  interactive prompt where searches, edits and printouts all run without
+  rescanning the file.
+year: 2026
+role: Solo
+status: live
+category: systems
+visibility: private
+tech:
+  - C++
+  - STL
+  - Hash Maps
+  - Binary Search
+  - Inverted Index
+repo: https://github.com/faiyajr/log-manager
+cover:
+  src: /images/projects/log-manager/cover-illustrated.png
+  alt: A terminal running a keyword search over log lines, with the matching entries highlighted and pulled into an excerpt list
+highlights:
+  - Timestamp range searches in O(log n) by binary search over a pre-sorted log
+  - Case-insensitive category lookups through a hash map built at load time
+  - Multi-word keyword search over an inverted index with sorted-list intersection
+  - Excerpt list stores indices into the log, never copies of entries
+---
+
+## The problem
+
+Every log line is a timestamp, a category and a message:
+
+```
+10:09:03:45:50|TCP|Packet 0x4235124 sent
+09:15:12:00:00|Clock|Noon 09/15
+```
+
+A developer chasing a bug wants to say "everything from TCP between these two
+times", or "every entry mentioning both `load` and `breakdown`", pull the hits
+into a short list of notes, reorder or trim that list, and print it. On a log
+with hundreds of thousands of lines, scanning the whole file for every query is
+too slow, and copying entries around for every edit wastes memory.
+
+## The plan
+
+**Do the expensive work once.** On load, the log is sorted a single time by
+timestamp, then category (case-insensitive), then original entry ID. Every
+later search and printout relies on that order, so results come out already
+sorted and never need sorting again.
+
+**One index per kind of search.**
+
+- *Timestamps:* because the log is sorted by time, a range or exact-time search
+  is just a `lower_bound` / `upper_bound` pair. The result is a start and end
+  index, with nothing copied.
+- *Categories:* a hash map from lowercased category to the sorted positions of
+  its entries, so a category search is one lookup.
+- *Keywords:* an inverted index from each word to the entries that contain it.
+  Category and message are split on non-alphanumeric characters, lowercased,
+  and de-duplicated per entry before indexing. A multi-word query starts from
+  the first word's list and intersects it with each of the others, stopping as
+  soon as a word has no matches.
+
+**An excerpt list of indices.** The user's working list is a deque of integers
+pointing into the sorted log, so appending a whole search result, moving an
+entry to the front or back, deleting one, or sorting the list moves small
+integers rather than strings. Because positions in the sorted log already
+encode timestamp/category/ID order, sorting the excerpt list is a plain integer
+sort. A separate table maps each original entry ID to its sorted position so
+entries can still be appended by the ID the user sees.
+
+**A forgiving prompt.** Commands are single letters read from an interactive
+`% ` prompt or a redirected file. Bad input (an unknown command, a malformed
+timestamp, an out-of-range position, printing results before any search) gets
+a one-line error on stderr and a fresh prompt rather than a crash.
+
+## Where it stands
+
+Finished. It handles the full command set (four kinds of search, seven
+excerpt-list edits, and the two print commands) and ships with a set of small
+hand-written log and command files built to catch edge cases like duplicate
+lines, case-only differences and empty searches.

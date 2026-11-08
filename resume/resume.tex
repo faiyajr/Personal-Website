@@ -88,7 +88,7 @@
   \resumeSubHeadingListStart
     \resumeSubheading
       {University of Michigan -- Ann Arbor}{Ann Arbor, MI}
-      {B.S.E. in Computer Engineering $|$ GPA: 3.6/4.0 $\cdot$ Dean's List}{Expected Graduation: May 2028}
+      {B.S.E. in Computer Engineering $|$ GPA: 3.6/4.0 $\cdot$ Dean's List}{Expected Graduation: May 2029}
       \resumeItemListStart
         \resumeItem{\textbf{Coursework:} Data Structures \& Algorithms, Computer Architecture, Object Oriented Programming, Discrete Math, Computing Systems, Linear Algebra, Multivariable \& Vector Calculus}
       \resumeItemListEnd
@@ -110,25 +110,8 @@
      \resumeItemListStart
       \resumeItem{Deployed a Flask operations platform to AWS and scripted multi-tenant KPIs and analytics scaling to \textbf{5000+} devices.}
       \resumeItem{Designed a Python tool to convert CAN \texttt{.asc} logs to \texttt{MF4} with DBC channel mapping, saving \textbf{20+} engineer-hours monthly.}
-      \resumeItem{Shipped a 3-agent pipeline, cleaning and tagging internal documents for a master agent, cutting new-hire escalations \textbf{40\%}.}
       \resumeItem{Engineered a multi-threaded GUI tool used by \textbf{100+} developers to build Python executables, saving \textbf{\$15K} in licenses.}
     \resumeItemListEnd
-
-    \resumeSubheading
-      {Hikmah Hackers}{Warren, MI}
-      {Co-Founder \& Lead Instructor}{Sep. 2026 -- Present}
-      \resumeItemListStart
-        \resumeItem{Co-founded a coding and mentorship program for underserved middle and high school students at a STEM school, teaching programming fundamentals through problem sets \& hands-on mini-projects, and giving students tailored career guidance.}
-        \resumeItem{Designing a curriculum spanning CS topics, game/web dev, and AI scripting, featuring hackathons offering cash prizes.}
-      \resumeItemListEnd
-    \resumeSubheading
-      {Saf $\cdot$ Darul Uloom Michigan}{Warren, MI}
-      {Software Developer}{Nov. 2025 -- Present}
-      \resumeItemListStart
-        \resumeItem{Launched a school-management beta on Postgres, an Express REST API, and React featuring role-based access control.}
-        \resumeItem{Implemented assignments, grading, and attendance, replacing paper grades for \textbf{20+} educators in a \textbf{3}-month live pilot.}
-        \resumeItem{Driving AI integration on a 3-engineer team, scoping LLM report card narratives \& role-scoped natural language querying.}
-      \resumeItemListEnd
 
     \resumeSubheading
       {MRacing FSAE}{Ann Arbor, MI}
@@ -140,12 +123,27 @@
       \resumeItemListEnd
 
     \resumeSubheading
+      {Hikmah Hackers}{Warren, MI}
+      {Co-Founder \& Lead Instructor}{Sep. 2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Co-founded a coding and mentorship program for underserved middle and high school students at a STEM school, teaching programming fundamentals through problem sets \& hands-on mini-projects, and giving students tailored career guidance.}
+        \resumeItem{Designing a curriculum spanning CS topics, game/web dev, and AI scripting, featuring hackathons offering cash prizes.}
+      \resumeItemListEnd
+
+    \resumeSubheading
       {University of Michigan Electric Vehicle Center}{Ann Arbor, MI}
       {Undergraduate Research Software Developer}{Sep. 2025 -- May 2026}
       \resumeItemListStart
         \resumeItem{Developed open-source Python UI software for an EV charging module, contributing to \textbf{\$10K} in net savings for an OEM.}
         \resumeItem{Designed a Simulink finite-state machine for system-safety logic and charging protocols, translating models into Python.}
-        \resumeItem{Integrated state logic into the software pipeline, coordinating state transitions, charging sequences, and safety conditions.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {Saf $\cdot$ Darul Uloom Michigan}{Warren, MI}
+      {Software Developer}{Nov. 2025 -- Present}
+      \resumeItemListStart
+        \resumeItem{Launched a school-management beta on Postgres, an Express REST API, and React featuring role-based access control.}
+        \resumeItem{Implemented assignments, grading, and attendance, replacing paper grades for \textbf{20+} educators in a \textbf{3}-month live pilot.}
       \resumeItemListEnd
   \resumeSubHeadingListEnd
 
@@ -154,14 +152,20 @@
     \resumeSubHeadingListStart
 
       \resumeProjectHeading
-          {\textbf{Stock Market Simulator \& PQ Libraries} $|$ \emph{C++, Linux, Templated design, Git}}{May. 2026 -- Oct. 2026}
+          {\textbf{LC-2K Pipelined Processor Simulator} $|$ \emph{C, Assembly, Make}}{Nov. 2026 -- Present}
           \resumeItemListStart
-            \resumeItem{Developed a C++ exchange simulator matching orders with \textbf{price--time priority}, partial fills, and multi-stock execution.}
-            \resumeItem{Implemented \textbf{3} priority queues (binary, sorting and pairing heaps) to test insertion, removal, and matching performance.}
-            \resumeItem{Built \textbf{4} reporting modes for live trades, running-median prices, trader PnL, and optimal historical buy/sell opportunities.}
+            \resumeItem{Implemented a \textbf{5-stage} pipelined processor simulator, with two-state clock updates and separate instruction/data memory.}
+            \resumeItem{Developing forwarding, load-use stalls, and branch squashing; debugging pipeline behavior with targeted assembly tests.}
           \resumeItemListEnd
 
-        \resumeProjectHeading
+      \resumeProjectHeading
+          {\textbf{75\% ISO Hall-Effect Keyboard PCB} $|$ \emph{STM32, KiCad, Solidworks}}{Dec. 2025 -- Jan. 2026}
+          \resumeItemListStart
+            \resumeItem{Designed an STM32 Hall-Effect keyboard PCB, with analog multiplexers, ADC routing, USB, SWD, I\textsuperscript{2}C OLED header.}
+            \resumeItem{Integrated RGB circuitry, separate analog/digital power distribution, ferrite isolation, decoupling, and ESD protection.}
+          \resumeItemListEnd
+
+      \resumeProjectHeading
           {\textbf{Low-Level Modulator} $|$ \emph{Verilog, Assembly, FPGA, Digital Logic}}{Jan. 2026 -- Apr. 2026}
           \resumeItemListStart
             \resumeItem{Engineered an \textbf{18}-instruction processor in Verilog on a DE2-115 FPGA, driving a synthesizer with \textbf{40} assembly modules.}
@@ -175,10 +179,9 @@
 \section{Technical Skills}
  \begin{itemize}[leftmargin=0.15in, label={}]
     \small{\item{
-     \textbf{Languages}{: Python, C, C++, JavaScript, TypeScript, SQL, Lua, Julia, Bash, Assembly, Verilog, MATLAB} \\
-     \textbf{Tools/Frameworks}{: Claude Code/Cursor Skills, React, Node/Express, Tailwind, PySide6, Flask, GoogleTest, PostgreSQL, Supabase, AWS, Docker, Kubernetes, Linux, GitLab, CAN, Raspberry Pi, Simulink} \\
-     \textbf{Practices}{: Agile/Scrum, Git/GitHub, CI/CD, code review, unit testing, LLM agents} \\
-     \textbf{Interests}{: Traveling, Gaming, Soccer, Weightlifting, Cooking, Studying Islam, Watching Movies}
+     \textbf{Languages}{: C, C++, Python, Assembly, Verilog, MATLAB, JavaScript, TypeScript, SQL, Julia, Bash} \
+     \textbf{Tools/Frameworks}{: STM32, FPGA, CAN/DBC, Raspberry Pi, GPIO, ADC, UART, SPI, I\textsuperscript{2}C, PCB Design, Altium, KiCad, SolidWorks, Siemens NX, Simulink, Linux, GDB, Valgrind, Make, CMake, GitLab, Docker, Kubernetes, AWS, React, Node/Express, Tailwind, PySide6, Flask, PostgreSQL, Supabase, Claude Code, Codex, Cursor} \
+     \textbf{Practices}{: Agile/Scrum, Git/GitHub, CI/CD, code review, unit testing, LLM agents}
     }}
  \end{itemize}
 

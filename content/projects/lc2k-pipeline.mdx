@@ -1,0 +1,76 @@
+---
+title: Pipelined Processor Simulator
+summary: A cycle-accurate C simulator of a five-stage pipelined LC-2K processor, with data forwarding, load-use stalls and predict-not-taken branching.
+description: >-
+  A single-cycle simulator tells you what a program computes. A pipelined one
+  has to get when right too: five instructions in flight at once, each in a
+  different stage, all reading and writing shared state on the same clock
+  edge. This simulator models that cycle by cycle and prints every pipeline
+  register on every cycle.
+year: 2026
+role: Solo
+status: in-progress
+category: systems
+visibility: private
+featured: true
+order: 2
+tech:
+  - C
+  - Computer Architecture
+  - Pipelining
+  - Assembly
+  - Make
+repo: https://github.com/faiyajr/pipeline
+cover:
+  src: /images/projects/lc2k-pipeline/cover-illustrated.png
+  alt: A pipeline diagram with instructions staggered across IF, ID, EX, MEM and WB stages, a stall bubble after a load, and a forwarding arrow into EX
+highlights:
+  - Five stages plus a WB/END register, modelled cycle by cycle
+  - Two-state clocking so every stage updates on the same edge
+  - Separate instruction and data memory
+  - Forwarding into EX, a one-cycle stall for load-use hazards, and squashing on mispredicted branches
+---
+
+## The problem
+
+In a pipeline, an `add` can start before the `lw` it depends on has finished
+loading. A branch isn't resolved until three more instructions have already
+been fetched behind it. Getting the program's answer right isn't enough: the
+contents of every pipeline register have to match real hardware on every
+cycle.
+
+## The plan
+
+**Clock it like hardware.** Each loop iteration is one cycle. Every stage
+reads only from `state` (the outputs of the clocked registers) and writes only
+to `newState` (their inputs), and `state = newState` is the rising clock edge.
+That keeps the five stages logically simultaneous even though C runs them one
+after another.
+
+**Five stages, six registers.** IF fetches from instruction memory and passes
+PC+1 along. ID is the only stage that reads the register file. EX runs the ALU.
+MEM loads and stores against a separate data memory. WB writes back. The
+register file has no internal forwarding, so a WB/END register holds the last
+written value one more cycle for later forwarding.
+
+**Hazards.**
+
+- *Forwarding:* EX takes its operands from the newest source available,
+  checking EX/MEM, then MEM/WB, then WB/END, before falling back to the value
+  read in ID.
+- *Load-use stall:* when a `lw` is followed by an instruction that reads its
+  destination register (other than `r0`), ID holds that instruction for one
+  cycle and sends a `noop` bubble down instead.
+- *Branches:* predict not-taken and keep fetching. A `beq` resolves in MEM,
+  and if it's taken, the three instructions fetched behind it are replaced
+  with `noop`s.
+
+**Halting.** The machine stops when `halt` reaches MEM/WB rather than when
+it's fetched, because a branch ahead of it might still squash it.
+
+## Where it stands
+
+The full pipeline runs hazard-free programs correctly: all five stages, the
+WB/END register, and split memories. Forwarding, the load-use stall and
+branch squashing are being built next, along with a test suite aimed at each
+of those paths individually.

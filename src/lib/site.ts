@@ -52,23 +52,45 @@ export const site = {
   structFields: [
     { type: "std::string", name: "school", value: "University of Michigan" },
     { type: "std::string", name: "major", value: "Computer Engineering" },
-    { type: "std::string", name: "graduation", value: "May 2028" },
     { type: "std::string", name: "role", value: "prev: SWE Intern @ Bosch" },
     { type: "std::string", name: "location", value: "Ann Arbor, MI" },
     { type: "std::string", name: "email", value: "faiyajr@umich.edu" },
     {
       type: "std::vector<std::string>",
       name: "interests",
-      value: ["low-level", "high-performance", "embedded", "ML infra"],
+      value: ["embedded", "firmware", "processors", "low-level"],
     },
   ] satisfies StructField[],
 
+  // ── "What I build with" on the home page, in display order ──────────────
+  toolkit: [
+    "C",
+    "C++",
+    "Assembly",
+    "Verilog",
+    "Python",
+    "STM32",
+    "FPGA",
+    "CAN/DBC",
+    "ADC",
+    "UART",
+    "SPI",
+    "I2C",
+    "PCB Design",
+    "KiCad",
+    "Raspberry Pi",
+    "Linux",
+    "GDB",
+    "Make/CMake",
+    "Simulink",
+  ],
+
   // ── About page bio ──────────────────────────────────────────────────────
   bio: [
-    "I'm a Computer Engineering student at the University of Michigan with a deep interest in low-level software, high-performance systems, ML architectures, and embedded platforms. I enjoy digging into complex systems, squeezing out maximum performance, and building things from the bare metal up.",
-    "I just wrapped up a Software Engineering internship at Bosch, where I worked on agentic AI and cloud platforms. Now I'm a Software Developer at Saf and co-founder of Hikmah Hackers, a coding and mentorship program for middle and high schoolers. On the side I'm building a Roblox game and tinkering with some AI-based software of my own.",
-    "When I'm not debugging software or optimizing architectures, you'll usually find me lifting heavy metal circles, playing football (no, it's not soccer), or running through lobbies in games 🤪.",
-    "Whether it's low-latency C++, embedded firmware, or ML infrastructure, I'm always up for connecting on hard engineering problems. Reach me at faiyajr@umich.edu.",
+    "I'm a Computer Engineering student at the University of Michigan with a deep interest in embedded systems, firmware, and processor architecture. I enjoy digging into where hardware and software meet and building things from the bare metal up.",
+    "I just wrapped up a Software Engineering internship at Bosch, where I worked on agentic AI and cloud platforms. Now I'm a Software Developer at Saf and co-founder of Hikmah Hackers, a coding and mentorship program for middle and high schoolers. On the side I'm working on an automation project of my own.",
+    "When I'm not debugging firmware or poking at processors, you'll usually find me lifting heavy metal circles, playing football (no, it's not soccer), or running through lobbies in games 🤪.",
+    "Whether it's embedded firmware, processor design, or low-level C/C++, I'm always up for connecting on hard engineering problems. Reach me at faiyajr@umich.edu.",
   ],
 
   // ── URLs ────────────────────────────────────────────────────────────────

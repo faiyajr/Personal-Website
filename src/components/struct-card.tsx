@@ -175,7 +175,7 @@ export function StructCard({ className }: { className?: string }) {
 
         <p className="sr-only">
           {site.name} studies {site.structFields.find((f) => f.name === "major")?.value} at the
-          University of Michigan, graduating May 2028. Based in {site.location}. Contact:{" "}
+          University of Michigan. Based in {site.location}. Contact:{" "}
           {site.email}.
         </p>
       </div>

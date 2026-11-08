@@ -1,33 +1,37 @@
 ---
-title: 75% ISO Hall-Effect Keyboard
-summary: A fully custom Hall-effect mechanical keyboard on STM32 — per-key analog measurement, addressable RGB, rotary encoder, OLED, and a case designed from scratch.
+title: 75% ISO Hall-Effect Keyboard PCB
+summary: A custom STM32 Hall-effect keyboard PCB in KiCad — per-key analog sensing through multiplexers into the ADC, split analog/digital power, USB, SWD, and an OLED header.
 description: >-
-  A 75% ISO Hall-effect keyboard built around an STM32 microcontroller. Every
-  key is measured as an analog value rather than a switch closure, which means
-  adjustable actuation depth per key. Designed with an emphasis on power
-  integrity, signal integrity, and manufacturability.
+  The board design for a 75% ISO Hall-effect keyboard built around an STM32
+  microcontroller. Every key is read as an analog value rather than a switch
+  closure, which allows adjustable actuation depth per key. Designed in KiCad
+  with an emphasis on power integrity, signal integrity, and manufacturability.
 year: [2025, 2026]
-role: PCB engineer — solo build
+role: PCB designer — solo
 status: live
-featured: false
-order: 22
+category: embedded
+featured: true
+order: 3
 size: wide
 tech:
   - STM32
-  - Altium
+  - KiCad
   - PCB Design
-  - Embedded C
-  - Analog Electronics
-  - CAD
+  - ADC
+  - USB
+  - SWD
+  - I2C
+  - SolidWorks
 repo: https://github.com/faiyajr/75-ISO-Hall-Effect-Keyboard
 cover:
   src: /images/projects/hall-effect-keyboard/cover-illustrated.png
   alt: A 75% keyboard layout with RGB-lit keys, a rotary encoder, an OLED readout and an adjustable actuation gauge
 highlights:
-  - Per-key analog measurement for adjustable actuation depth
-  - Addressable RGB, rotary encoder, and OLED support
-  - Power and signal integrity treated as first-order design constraints
-  - Custom-designed case
+  - Per-key analog sensing through analog multiplexers into the STM32's ADC
+  - USB, SWD debug/programming header, and an I2C OLED header
+  - Separate analog and digital power distribution with ferrite isolation
+  - Decoupling and ESD protection on every external-facing line
+  - Addressable RGB, rotary encoder, and a case designed in SolidWorks
 draft: false
 ---
 
@@ -38,21 +42,35 @@ reports a magnetic field strength that varies continuously with travel — which
 means the keyboard knows *how far down* each key is, and actuation depth
 becomes a per-key setting rather than a property of the switch you soldered in.
 
-Getting that requires reading an analog value from every key, cleanly, fast
-enough that no one perceives latency.
+Getting that requires a board that can read an analog value from every key,
+cleanly, fast enough that no one would perceive latency. This project is that
+board: the schematic, layout, and case, designed to be fabricated.
 
 ## Approach
+
+**Getting 80+ analog signals into one microcontroller.** An STM32 doesn't have
+an ADC channel per key, so the Hall sensors feed banks of analog multiplexers.
+The STM32 drives the mux select lines and samples each mux output on an ADC
+input, so the whole board can be scanned key by key. The ADC routing from each
+mux to the microcontroller was laid out as its own concern, short and away from
+anything switching.
 
 **Analog integrity first.** The signal being measured is a small voltage
 varying with magnet distance, on a board that also carries addressable RGB
 switching current at every key. Getting a clean reading is a layout problem
-before it is a firmware problem — ground pours, return paths, and keeping the
+before it is ever a firmware problem — ground pours, return paths, and keeping the
 analog sense lines away from everything noisy.
 
-**Power design as a first-order concern.** Per-key RGB plus an OLED plus an
-STM32 doing continuous ADC sampling adds up. Designing the power tree properly
-at the schematic stage is much cheaper than discovering brownouts on assembled
-hardware.
+**Separate analog and digital power.** Per-key RGB plus an OLED plus an STM32
+doing continuous ADC sampling adds up, and LED switching noise on the sensor
+supply shows up directly as jitter in the readings. The analog and digital
+rails are distributed separately, with ferrite beads isolating them and
+decoupling at every IC. Designing the power tree properly at the schematic
+stage is much cheaper than discovering brownouts on assembled hardware.
+
+**Designed to be debugged and plugged in.** USB for the host connection, an SWD
+header for programming and on-chip debugging, an I2C header for the OLED, and
+ESD protection on the lines a user's hands and cables actually touch.
 
 **Manufacturability as a constraint, not an afterthought.** Component choices,
 footprint decisions, and assembly tolerances were made against what can
@@ -60,12 +78,12 @@ actually be fabricated and hand-assembled — a board that only works in CAD is
 not a board.
 
 **Case designed alongside the PCB.** Mounting points, port cutouts, and the
-plate all came from the same model, so board revisions and case revisions
-stayed in step.
+plate were modelled in SolidWorks against the same board outline, so board
+revisions and case revisions stayed in step.
 
 ## What I got out of it
 
-A working keyboard, and a much better feel for the parts of embedded work that
-have nothing to do with code. Firmware bugs you can iterate on in seconds;
-a board respin costs weeks. That asymmetry changes how carefully you read a
-datasheet.
+A complete board design, and a much better feel for the parts of embedded
+work that have nothing to do with code. Firmware bugs you can iterate on in
+seconds; a board respin costs weeks. That asymmetry changes how carefully you
+read a datasheet.
