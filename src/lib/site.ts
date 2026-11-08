@@ -38,9 +38,10 @@ export const site = {
    */
   headlinePhrases: [
     "a Computer Engineering student at Michigan.",
-    "a software engineer.",
+    "an engineer.",
     "a builder.",
-    "an entrepreneur.",
+    "a lifelong learner.",
+    "a leader.",
   ],
 
   location: "Ann Arbor, MI",
